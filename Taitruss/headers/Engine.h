@@ -3,5 +3,6 @@
 
 class Engine {
 public:
-	void BeginSession();
+	void BeginSession(int resolution);
+	void Render(SDL_Renderer* renderer);
 };

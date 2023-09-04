@@ -6,8 +6,18 @@
 //ability to rotate
 #include "../headers/Engine.h"
 
-void Engine::BeginSession() {
-	Board* board = new Board();
+Board* board = nullptr;
+void Engine::BeginSession(int resolution) {
+	board = new Board(resolution);
 	board->CreateBoard();
+	
 	board->Print();
 }
+void Engine::Render(SDL_Renderer* renderer) {
+	SDL_RenderClear(renderer);
+	board->DrawBoard();
+	SDL_RenderPresent(renderer);
+
+
+}
+

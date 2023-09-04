@@ -24,12 +24,14 @@
     <ClCompile Include="src\Interface.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\Square.cpp" />
+    <ClCompile Include="src\TextureManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="headers\Board.h" />
     <ClInclude Include="headers\Engine.h" />
     <ClInclude Include="headers\Interface.h" />
     <ClInclude Include="headers\Square.h" />
+    <ClInclude Include="headers\TextureManager.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
@@ -84,8 +86,8 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>C:\vclib\SDL2-2.28.3\include;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\vclib\SDL2-2.28.3\lib\x64;$(LibraryPath)</LibraryPath>
+    <IncludePath>C:\vclib\SDL2_image-2.6.3\include;C:\vclib\SDL2-2.28.3\include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\vclib\SDL2_image-2.6.3\lib\x64;C:\vclib\SDL2-2.28.3\lib\x64;$(LibraryPath)</LibraryPath>
     <OutDir>$(SolutionDir)bin\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)bin\intermediate\$(Configuration)\</IntDir>
   </PropertyGroup>
@@ -139,7 +141,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>SDL2.lib;SDL2main.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_image.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">

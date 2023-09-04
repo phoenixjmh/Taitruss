@@ -1,13 +1,14 @@
 #pragma once
 #include <SDL.h>
 #include<iostream>
+#include "TextureManager.h";
 class Interface {
 public:
 	SDL_Window* window;
-	SDL_Renderer* renderer;
 	bool isRunning;
+	static SDL_Renderer* renderer;
 	static SDL_Event event;
-	void CreateWindow(int SCREEN_WIDTH, int SCREEN_HEIGHT, const char* name);
+	SDL_Renderer* CreateWindow(int SCREEN_WIDTH, int SCREEN_HEIGHT, const char* name);
 	void HandleEvents();
 	void Clean();
 

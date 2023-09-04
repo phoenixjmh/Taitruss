@@ -1,11 +1,11 @@
 #include "../headers/Board.h";
-#include "../headers/Square.h"
 #include <iostream>;
 
 void Board::CreateBoard() {
 	//Add an instance of square class to every position in board
 	//store location maybe in XY coord
 	//square has boolean of if it's space is occupied
+	
 	
 	std::cout << "Creating board here" << std::endl;
 	for (size_t i = 0; i <this->HEIGHT ; i++)
@@ -18,6 +18,19 @@ void Board::CreateBoard() {
 			this->squareObjects.push_back(square);
 			//std::cout << this->squares[i][y];
 		}
+	}
+	this->resolution = resolution;
+	src.x = src.y = 0;
+	src.w = dest.w = 32;
+	src.h = dest.h = 32;
+	BlankSquare = TextureManager::LoadTexture("res/img/BlankSquare.png");
+}
+
+void Board::DrawBoard() {
+	for (auto& s : squareObjects) {
+		dest.x = s.xLocation*this->resolution;
+		dest.y = s.yLocation*this->resolution;
+		TextureManager::Draw(BlankSquare,src,dest);
 	}
 }
 void Board::Print() {
