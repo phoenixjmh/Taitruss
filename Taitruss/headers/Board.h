@@ -9,10 +9,11 @@ public:
 	int resolution;
 	SDL_Rect src, dest;
 	std::vector<Square> squareObjects;
+	int winWidth = 0, winHeight = 0;
 	static const int HEIGHT=10;
 	static const int WIDTH=6;
 	int squares[HEIGHT][WIDTH];
-	void CreateBoard();
+	void CreateBoard(SDL_Window* window);
 	void DrawBoard();
 	void Print();
 	SDL_Texture* BlankSquare;

@@ -6,10 +6,10 @@
 //ability to rotate
 #include "../headers/Engine.h"
 
-Board* board = nullptr;
-void Engine::BeginSession(int resolution) {
+//Board* board = nullptr;
+void Engine::BeginSession(int resolution,SDL_Window* window) {
 	board = new Board(resolution);
-	board->CreateBoard();
+	board->CreateBoard(window);
 	
 	board->Print();
 }

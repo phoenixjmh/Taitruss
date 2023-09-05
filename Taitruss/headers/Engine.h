@@ -3,6 +3,7 @@
 
 class Engine {
 public:
-	void BeginSession(int resolution);
+	Board* board;
+	void BeginSession(int resolution,SDL_Window* window);
 	void Render(SDL_Renderer* renderer);
 };

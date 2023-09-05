@@ -1,11 +1,11 @@
 #include "../headers/Board.h";
 #include <iostream>;
 
-void Board::CreateBoard() {
+void Board::CreateBoard(SDL_Window* win) {
 	//Add an instance of square class to every position in board
 	//store location maybe in XY coord
 	//square has boolean of if it's space is occupied
-	
+	SDL_GetWindowSize(win, &winWidth, &winHeight);
 	
 	std::cout << "Creating board here" << std::endl;
 	for (size_t i = 0; i <this->HEIGHT ; i++)
@@ -28,8 +28,10 @@ void Board::CreateBoard() {
 
 void Board::DrawBoard() {
 	for (auto& s : squareObjects) {
-		dest.x = s.xLocation*this->resolution;
-		dest.y = s.yLocation*this->resolution;
+		int centeredStartX = (winWidth / 2) + (s.xLocation * this->resolution) - ((WIDTH * 32) / 2);
+		int centeredStartY = (winHeight / 2 )+ (s.yLocation * this->resolution) - ((HEIGHT*32)/2);
+		dest.x = centeredStartX;
+		dest.y = centeredStartY;
 		TextureManager::Draw(BlankSquare,src,dest);
 	}
 }

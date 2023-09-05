@@ -5,6 +5,7 @@
 Interface* interface = nullptr;
 Engine* engine = nullptr;
 SDL_Renderer* renderer=nullptr;
+SDL_Window* window = nullptr;
 int blockResolution = 32;
 int main(int argc, char* argv[]) {
 	int SCREEN_WIDTH = 640;
@@ -13,7 +14,8 @@ int main(int argc, char* argv[]) {
 	interface = new Interface();
 	engine = new Engine();
 	renderer=interface->CreateWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "Taitruss");
-	engine->BeginSession(blockResolution);
+	window = interface->window;
+	engine->BeginSession(blockResolution,window);
 
 	while (interface->isRunning) {
 		interface->HandleEvents();

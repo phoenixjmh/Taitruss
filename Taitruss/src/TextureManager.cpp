@@ -20,5 +20,4 @@ SDL_Texture* TextureManager::LoadTexture(const char* filename)
 void TextureManager::Draw(SDL_Texture* tex, SDL_Rect src, SDL_Rect dest)
 {
 	SDL_RenderCopy(Interface::renderer, tex, &src, &dest);
-	std::cout << "Drawing " << tex<<std::endl;
 }

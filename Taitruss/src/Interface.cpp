@@ -5,8 +5,7 @@ SDL_Event Interface::event;
 SDL_Renderer* Interface::renderer = nullptr;
 
 SDL_Renderer* Interface::CreateWindow(int SCREEN_WIDTH, int SCREEN_HEIGHT, const char* name) {
-	//The window we'll be rendering to
-	SDL_Window* window = NULL;
+	
 
 	//The surface contained by the window
 	SDL_Surface* screenSurface = NULL;
