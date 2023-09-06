@@ -1,5 +1,5 @@
 #include "../headers/Board.h";
-#include <iostream>;
+#include <iostream>
 
 #define LOG(x) std::cout<<x<<std::endl;
 void Board::CreateBoard(SDL_Window* win) {
@@ -39,6 +39,7 @@ void Board::AddPiece(std::string type) {
 				if (s.xLocation == (WIDTH/2)-1 || s.xLocation == (WIDTH/2)+1) {
 					s.type = type;
 					s.isOccupied = true;
+					s.facing = "N";
 				}
 			}
 		}
@@ -48,10 +49,12 @@ void Board::AddPiece(std::string type) {
 		for (auto& s : squareObjects) {
 			//Add top pieces of square
 			//index through squareObjectsBasedOnHeight
-			if (s.yLocation == 0 || s.yLocation == 1 || s.yLocation == 2 || s.yLocation == 3) {
-				if (s.xLocation == WIDTH/2) {
+			if (s.yLocation == 0) {
+			if (s.xLocation == (WIDTH/2)-2 || s.xLocation == (WIDTH/2)-1 || s.xLocation == WIDTH/2 || s.xLocation ==(WIDTH/2)+1) {
+				
 					s.type = type;
 					s.isOccupied = true;
+					s.facing = "N";
 				}
 			}
 		}
@@ -63,13 +66,19 @@ void Board::AddPiece(std::string type) {
 	void Board::RotatePiece() {
 		//Clockwise Turn
 		std::string _type;
+		std::string _facing;
 		std::vector<Square*> occupiedPieces;
 		for (auto& s : squareObjects)
 		{
 			if (s.isOccupied && !s.isPlaced) {
-			occupiedPieces.push_back(&s);
-			_type = s.type;
+				occupiedPieces.push_back(&s);
+				_type = s.type;
+				_facing = s.facing;
+
+				
 			}
+			else if (!s.isOccupied)
+				s.facing = "NA";
 		}
 
 		Square* first = occupiedPieces.front();
@@ -89,29 +98,65 @@ void Board::AddPiece(std::string type) {
 		for (auto& s : squareObjects) {
 			if (/*s.isOccupied && */!s.isPlaced) {
 				s.isOccupied = false;
-				//for rotating clockwise vert to hori
-				if (pieceHeight > pieceWidth) {
-				if (s.yLocation == middleYAxis) {
-					if (s.xLocation >= middleXAxis - (pieceHeight / 2) && s.xLocation <= middleXAxis-1 + (pieceHeight / 2)) {
-						std::cout << "Found one @" << middleXAxis << std::endl;
-						s.isOccupied=true;
-						s.type = _type;
-					}
 
-				}
-
-				}
-				if (pieceWidth > pieceHeight) {
+				if (s.facing == "N") {
+					std::cout << "Moving from N to E" << std::endl;
 					if (s.xLocation == middleXAxis) {
-						if (s.yLocation >= middleYAxis - (pieceWidth / 2) && s.yLocation <= middleYAxis - 1 + (pieceWidth / 2)) {
-							std::cout << "Found one @" << middleXAxis << std::endl;
+						if (s.yLocation >= middleYAxis + 1 - (pieceWidth / 2) && s.yLocation <= middleYAxis + (pieceWidth / 2)) {
+
 							s.isOccupied = true;
 							s.type = _type;
+							s.facing = "E";
 						}
 					}
 				}
-				//deactivate current positions
-				
+			}
+			for (auto& s : squareObjects) {
+				if (s.facing == "E") {
+					std::cout << "Moving from E to S" << std::endl;
+					if (s.yLocation == middleYAxis) {
+						if (s.xLocation >= middleXAxis - (pieceHeight / 2) && s.xLocation <= middleXAxis - 1 + (pieceHeight / 2)) {
+							std::cout << "Found one @" << middleXAxis << std::endl;
+							s.isOccupied = true;
+							s.type = _type;
+							s.facing = "S";
+						}
+
+					}
+				}
+			}
+			for (auto& s : squareObjects) {
+				if (s.facing == "S") {
+					std::cout << "Moving from S to W" << std::endl;
+					if (s.xLocation == middleXAxis) {
+						if (s.yLocation >= middleYAxis + 1 - (pieceWidth / 2) && s.yLocation <= middleYAxis + (pieceWidth / 2)) {
+							std::cout << "Found one @" << middleXAxis << std::endl;
+							s.isOccupied = true;
+							s.type = _type;
+							s.facing = "W";
+						}
+					}
+				}
+			}
+			for each (object var in collection_to_loop)
+			{
+
+			}
+				if (s.facing == "W") {
+					std::cout << "Moving from W to N" << std::endl;
+					if (s.yLocation == middleYAxis) {
+						if (s.xLocation >= middleXAxis - (pieceHeight / 2) && s.xLocation <= middleXAxis - 1 + (pieceHeight / 2)) {
+							std::cout << "Found one @" << middleXAxis << std::endl;
+							s.isOccupied = true;
+							s.type = _type;
+							s.facing = "N";
+						}
+						else {
+							s.facing = "NA";
+						}
+
+					}
+				}
 			}
 		}
 
@@ -119,13 +164,16 @@ void Board::AddPiece(std::string type) {
 		void Board::MoveDown() {
 			std::vector<Square*> occupiedSquares;
 			std::string _type;
+			std::string _facing;
 			//Find all occupied squares
 			for (auto& s : squareObjects) {
 
 				if (s.isOccupied && !s.isPlaced) {
 					_type = s.type;
+					_facing = s.facing;
 					occupiedSquares.push_back(&s);
 					s.isOccupied = false;
+					
 				}
 			}
 			//push all occupied squares down one piece  
@@ -144,6 +192,7 @@ void Board::AddPiece(std::string type) {
 
 						s.isOccupied = true;
 						s.type = _type;
+						s.facing = _facing;
 
 
 
@@ -185,7 +234,13 @@ void Board::AddPiece(std::string type) {
 		}
 
 		void Board::PrintB() {
+			int counter = 0;
 			for (auto i = this->squareObjects.begin(); i != this->squareObjects.end(); ++i) {
-				std::cout << "| " << i->isOccupied << " |" << std::endl;
+				counter++;
+				std::cout << "| " << i->facing << " |";
+				if (counter >= WIDTH) {
+					std::cout << std::endl;
+					counter = 0;
+				}
 			}
 		}
