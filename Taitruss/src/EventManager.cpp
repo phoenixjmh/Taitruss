@@ -14,7 +14,6 @@ void EventManager::HandleEvents() {
 				std::cout << "SPACE" << std::endl;
 				//Call event to board.
 				_engine->board->RotatePiece();
-				_engine->board->PrintB();
 	
 				break;
 			case SDLK_e:

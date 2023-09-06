@@ -6,6 +6,7 @@
 
 class Board {
 public:
+	bool rotated;
 	int resolution;
 	SDL_Rect src, dest;
 	std::vector<Square> squareObjects;
@@ -16,6 +17,7 @@ public:
 	void CreateBoard(SDL_Window* window);
 	void AddPiece(std::string type);
 	void RotatePiece();
+	void RotateLogicForLong(std::string _type,std::string _facing,int pieceHeight, int pieceWidth, int middleXAxis, int middleYAxis);
 	void MoveDown();
 	void DrawBoard();
 	void Print();

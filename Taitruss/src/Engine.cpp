@@ -31,7 +31,6 @@ void Engine::AddPiece() {
 
 }
 void Engine::MoveBlockDown() {
-
 	if (!Freeze)
 		board->MoveDown();
 
