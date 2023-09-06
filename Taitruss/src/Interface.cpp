@@ -1,8 +1,16 @@
 #include "../headers/Interface.h";
 
 
-SDL_Event Interface::event;
+//SDL_Event Interface::event;
 SDL_Renderer* Interface::renderer = nullptr;
+
+
+Interface::Interface() {
+	
+		isRunning = false;
+		window = nullptr;
+	
+}
 
 SDL_Renderer* Interface::CreateWindow(int SCREEN_WIDTH, int SCREEN_HEIGHT, const char* name) {
 	
@@ -31,18 +39,36 @@ SDL_Renderer* Interface::CreateWindow(int SCREEN_WIDTH, int SCREEN_HEIGHT, const
 		return renderer;
 	}
 }
+//void Interface::KeyboardInput() {
+//	SDL_PollEvent(&event);
+//	if (event.type == SDL_KEYDOWN) {
+//		switch (event.key.keysym.sym) {
+//		case SDLK_SPACE:
+//			std::cout << "SPACE" << std::endl;
+//			//Call event to board.
+//
+//			break;
+//		default:
+//			break;
+//		}
+//
+//	}
+//
+//}
 
-
-void Interface::HandleEvents() {
-	SDL_PollEvent(&event);
-	switch (event.type) {
-	case SDL_QUIT:
-		isRunning = false;
-		break;
-	default:
-		break;
-	}
-}
+//void Interface::HandleEvents() {
+//	
+//	SDL_PollEvent(&event);
+//	
+//	switch (event.type) {
+//	
+//	case SDL_QUIT:
+//		isRunning = false;
+//		break;
+//	default:
+//		break;
+//	}
+//}
 void Interface::Clean() {
 	SDL_DestroyRenderer(renderer);
 	SDL_DestroyWindow(window);

@@ -4,4 +4,7 @@ void Square::init(int xLoc, int yLoc) {
 	this->xLocation = xLoc;
 	this->yLocation = yLoc;
 	this->isOccupied = false;
+	this->isPlaced = false;
+	this->type = "Blank";
+	this->facing = N;
 }

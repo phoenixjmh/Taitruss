@@ -21,6 +21,7 @@
   <ItemGroup>
     <ClCompile Include="src\Board.cpp" />
     <ClCompile Include="src\Engine.cpp" />
+    <ClCompile Include="src\EventManager.cpp" />
     <ClCompile Include="src\Interface.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\Square.cpp" />
@@ -29,6 +30,7 @@
   <ItemGroup>
     <ClInclude Include="headers\Board.h" />
     <ClInclude Include="headers\Engine.h" />
+    <ClInclude Include="headers\EventManager.h" />
     <ClInclude Include="headers\Interface.h" />
     <ClInclude Include="headers\Square.h" />
     <ClInclude Include="headers\TextureManager.h" />
@@ -140,6 +142,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <ShowIncludes>true</ShowIncludes>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
