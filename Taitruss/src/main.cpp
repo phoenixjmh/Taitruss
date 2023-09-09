@@ -10,7 +10,7 @@ SDL_Window* window = nullptr;
 EventManager* eventManager;
 int blockResolution = 32;
 Uint32 frameStart;
-const int frameDelay = 1000;
+const int frameDelay = 500;
 
 int frameTime;
 int main(int argc, char* argv[]) {
@@ -29,6 +29,7 @@ int main(int argc, char* argv[]) {
 		frameStart = SDL_GetTicks();
 		eventManager->HandleEvents();
 		engine->Render(renderer);
+		engine->Update();
 
 		if (frameStart - previousBlockFallTime >= frameDelay) {
 			engine->MoveBlockDown();

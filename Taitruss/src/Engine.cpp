@@ -15,6 +15,17 @@ void Engine::BeginSession(int resolution, SDL_Window* window) {
 	//board->Print();
 }
 
+void Engine::Update() {
+	if (board)
+		if (board->dropPiece) {
+			board->AddPiece("Long");
+			
+
+		}
+	board->UpdatePositions();
+	board->CollisionCheck();
+}
+
 void Engine::Render(SDL_Renderer* renderer) {
 
 	SDL_RenderClear(renderer);
