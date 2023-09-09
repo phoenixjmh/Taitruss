@@ -3,27 +3,21 @@
 #include "../headers/Engine.h"
 #include "../headers/EventManager.h"
 
-Interface* interface = nullptr;
-Engine* engine = nullptr;
-SDL_Renderer* renderer=nullptr;
-SDL_Window* window = nullptr;
-EventManager* eventManager;
-int blockResolution = 32;
-Uint32 frameStart;
-const int frameDelay = 500;
 
-int frameTime;
 int main(int argc, char* argv[]) {
-	int SCREEN_WIDTH = 640;
-	int SCREEN_HEIGHT = 480;
-	interface = new Interface();
-	engine = new Engine();
-	eventManager = new EventManager(engine, interface);
-
-	renderer=interface->CreateWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "Taitruss");
-	window = interface->window;
+	Uint32 frameStart;
+	const int frameDelay = 500;
+	const int blockResolution = 32;
+	const int SCREEN_WIDTH = 640;
+	const int SCREEN_HEIGHT = 480;
+	Interface* interface = new Interface();
+	Engine* engine = new Engine();
+	EventManager* eventManager = new EventManager(engine, interface);
+	SDL_Window* window = interface->CreateWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "Taitruss");
+	SDL_Renderer* renderer = Interface::renderer;
 	Uint32 previousBlockFallTime = SDL_GetTicks();
-	engine->BeginSession(blockResolution,window);
+
+	engine->BeginSession(blockResolution, window);
 
 	while (interface->isRunning) {
 		frameStart = SDL_GetTicks();
@@ -35,7 +29,7 @@ int main(int argc, char* argv[]) {
 			engine->MoveBlockDown();
 			previousBlockFallTime = frameStart;
 		}
-		
+
 
 	}
 	interface->Clean();

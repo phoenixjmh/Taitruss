@@ -1,11 +1,7 @@
 #include "../headers/EventManager.h"
 
 SDL_Event EventManager::event;
-EventManager::EventManager(Engine* engine, Interface* interface) {
-	_engine = engine;
-	_interface = interface;
 
-}
 void EventManager::HandleEvents() {
 	SDL_PollEvent(&event);
 	if (event.type == SDL_KEYDOWN) {

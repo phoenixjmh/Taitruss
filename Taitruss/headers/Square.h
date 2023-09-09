@@ -15,7 +15,5 @@ public:
 		isPlaced{false},
 		type{"Blank"},
 		facing{"NA"}
-
-
 	{}
 };

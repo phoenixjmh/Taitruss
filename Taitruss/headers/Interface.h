@@ -6,16 +6,17 @@
 class Interface {
 public:
 	SDL_Window* window;
+
 	bool isRunning;
+	
 	static SDL_Renderer* renderer;
-	/*static SDL_Event event;*/
-	SDL_Renderer* CreateWindow(int SCREEN_WIDTH, int SCREEN_HEIGHT, const char* name);
-	//void KeyboardInput();
-	//void HandleEvents();
+	
+	SDL_Window* CreateWindow(int SCREEN_WIDTH, int SCREEN_HEIGHT, const char* name);
+	
 	void Clean();
-	Interface();
-
-
-
-
+	
+	Interface() :
+		isRunning{ false },
+		window{ nullptr }
+	{}
 };

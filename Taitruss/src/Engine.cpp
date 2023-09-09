@@ -1,10 +1,8 @@
 #include "../headers/Engine.h"
 
-Uint32 previousBlockFallTime = SDL_GetTicks();
-//Board* board = nullptr;
 void Engine::BeginSession(int resolution, SDL_Window* window) {
-	board = new Board(resolution);
-	board->CreateBoard(window);
+	board = new Board(resolution,window);
+	/*board->CreateBoard(window);*/
 	AddPiece();
 }
 

@@ -38,15 +38,24 @@ public:
 	void DrawBoard();
 	void Print();
 	void PrintB();
-	Board(int res)
-		:rotated{ false }
-		, resolution{ res }
-		, BlankSquare{ TextureManager::LoadTexture("res/img/BlankSquare.png") }
-		, BlueSquare{ TextureManager::LoadTexture("res/img/BlueSquare.png") }
-		, YellowSquare{ TextureManager::LoadTexture("res/img/YellowSquare.png") }
-		, pauseUpdate{ false }
-		, src{ SDL_Rect() }
-		, dest{ SDL_Rect() }
-	{}
+	Board(int res, SDL_Window* win)
+		:rotated{ false }, resolution{ res },
+		BlankSquare{ TextureManager::LoadTexture("res/img/BlankSquare.png") },
+		BlueSquare{ TextureManager::LoadTexture("res/img/BlueSquare.png") },
+		YellowSquare{ TextureManager::LoadTexture("res/img/YellowSquare.png") },
+		pauseUpdate{ false }, src{ SDL_Rect{0,0,res,res} },
+		dest{ SDL_Rect { 0,0,resolution,resolution } }
+	{
+		SDL_GetWindowSize(win, &winWidth, &winHeight);
+		std::cout << "Creating board here" << std::endl;
+		for (int i = 0; i < this->HEIGHT; i++)
+		{
+			for (int y = 0; y < WIDTH; y++)
+			{
+				Square square(y, i);
+				this->squareObjects.push_back(square);
+			}
+		}
+	}
 
 };

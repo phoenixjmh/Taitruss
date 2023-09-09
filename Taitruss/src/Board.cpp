@@ -2,27 +2,6 @@
 #include <iostream>
 #include <algorithm>
 
-void Board::CreateBoard(SDL_Window* win) {
-
-	SDL_GetWindowSize(win, &winWidth, &winHeight);
-
-	std::cout << "Creating board here" << std::endl;
-	for (int i = 0; i < this->HEIGHT; i++)
-	{
-		std::cout << std::endl;
-		for (int y = 0; y < WIDTH; y++)
-		{
-			Square square(y,i);
-			this->squareObjects.push_back(square);
-		}
-	}
-	this->resolution = resolution;
-	src.x = src.y = 0;
-	src.w = dest.w = 32;
-	src.h = dest.h = 32;
-
-	rotated = false;
-}
 void Board::AddPiece(std::string type) {
 	dropPiece = false;
 
