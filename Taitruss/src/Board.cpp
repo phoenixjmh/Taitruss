@@ -12,8 +12,7 @@ void Board::CreateBoard(SDL_Window* win) {
 		std::cout << std::endl;
 		for (int y = 0; y < WIDTH; y++)
 		{
-			Square square;
-			square.init(y, i);
+			Square square(y,i);
 			this->squareObjects.push_back(square);
 		}
 	}

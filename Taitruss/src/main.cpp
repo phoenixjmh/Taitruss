@@ -1,7 +1,7 @@
-#include <iostream>;
+#include <iostream>
 #include "../headers/Interface.h"
-#include"../headers/Engine.h";
-#include "../headers/EventManager.h";
+#include "../headers/Engine.h"
+#include "../headers/EventManager.h"
 
 Interface* interface = nullptr;
 Engine* engine = nullptr;

@@ -1,6 +1,6 @@
 #pragma once
-#include "Engine.h";
-#include "Interface.h";
+#include "Engine.h"
+#include "Interface.h"
 
 class EventManager {
 public:

@@ -1,4 +1,4 @@
-#include "../headers/EventManager.h";
+#include "../headers/EventManager.h"
 
 SDL_Event EventManager::event;
 EventManager::EventManager(Engine* engine, Interface* interface) {

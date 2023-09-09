@@ -8,5 +8,14 @@ public:
 	bool isPlaced;
 	int xLocation;
 	int yLocation;
-	void init(int xLoc,int yLoc);
+	Square(int xLoc,int yLoc):
+		xLocation{xLoc},
+		yLocation{yLoc},
+		isOccupied{false},
+		isPlaced{false},
+		type{"Blank"},
+		facing{"NA"}
+
+
+	{}
 };
