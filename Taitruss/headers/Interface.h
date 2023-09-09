@@ -1,7 +1,7 @@
 #pragma once
 #include <SDL.h>
 #include<iostream>
-#include "TextureManager.h";
+#include "TextureManager.h"
 
 class Interface {
 public:

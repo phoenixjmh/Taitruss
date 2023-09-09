@@ -9,5 +9,4 @@ public:
 	Interface* _interface;
 	static SDL_Event event;
 	void HandleEvents();
-
 };

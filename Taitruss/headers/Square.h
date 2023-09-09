@@ -4,9 +4,6 @@ class Square {
 public:
 	std::string type;
 	std::string facing;
-	/*enum orientation{N,E,S,W};
-	orientation facing;*/
-	
 	bool isOccupied;
 	bool isPlaced;
 	int xLocation;

@@ -12,34 +12,25 @@ void Engine::BeginSession(int resolution, SDL_Window* window) {
 	board = new Board(resolution);
 	board->CreateBoard(window);
 	AddPiece();
-	//board->Print();
 }
 
 void Engine::Update() {
 	if (board)
 		if (board->dropPiece) {
 			board->AddPiece("Long");
-			
-
 		}
 	board->UpdatePositions();
 	board->CollisionCheck();
 }
 
 void Engine::Render(SDL_Renderer* renderer) {
-
 	SDL_RenderClear(renderer);
 	board->DrawBoard();
 	SDL_RenderPresent(renderer);
-
-
 }
 void Engine::AddPiece() {
-
-	//board->AddPiece("Square");
+	//Use this later to scramble the bag.
 	board->AddPiece("Long");
-
-
 }
 void Engine::MoveBlockDown() {
 	if (!Freeze)
