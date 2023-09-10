@@ -9,7 +9,7 @@ public:
 	void BeginSession(int resolution,SDL_Window* window);
 	void Update();
 	void Render(SDL_Renderer* renderer);
-	void AddPiece();
+	void DropLogic();
 	void MoveBlockDown();
 	Engine():
 		Freeze{ false },

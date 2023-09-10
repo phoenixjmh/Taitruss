@@ -2,8 +2,7 @@
 
 void Engine::BeginSession(int resolution, SDL_Window* window) {
 	board = new Board(resolution,window);
-	/*board->CreateBoard(window);*/
-	AddPiece();
+	DropLogic();
 }
 
 void Engine::Update() {
@@ -20,7 +19,7 @@ void Engine::Render(SDL_Renderer* renderer) {
 	board->DrawBoard();
 	SDL_RenderPresent(renderer);
 }
-void Engine::AddPiece() {
+void Engine::DropLogic() {
 	//Use this later to scramble the bag.
 	board->AddPiece("Long");
 }
