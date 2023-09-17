@@ -22,8 +22,8 @@ int main(int argc, char* argv[]) {
 	while (interface->isRunning) {
 		frameStart = SDL_GetTicks();
 		eventManager->HandleEvents();
-		engine->Render(renderer);
 		engine->Update();
+		engine->Render(renderer);
 
 		if (frameStart - previousBlockFallTime >= frameDelay) {
 			engine->MoveBlockDown();
