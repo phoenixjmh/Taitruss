@@ -3,6 +3,7 @@
 
 bool Piece::CanRotate(std::string type, std::string facing, std::vector<Tile*> occupiedSquares, std::vector<Tile>& allSquares, int WIDTH, int HEIGHT) {
 	std::cout << "Facing: " << facing << "\n";
+
 	if (BorderCheck(type, facing, occupiedSquares, WIDTH, HEIGHT) && NeighborCheck(type, facing, occupiedSquares, allSquares))
 		return true;
 	else return false;
@@ -50,91 +51,176 @@ bool Piece::BorderCheck(std::string type, std::string facing, std::vector<Tile*>
 	}
 }
 bool Piece::NeighborCheck(std::string type, std::string facing, std::vector<Tile*> occupiedSquares, std::vector<Tile>& allSquares) {
-	std::vector<Tile*> radius = GetRadius(type, facing, occupiedSquares, allSquares);
-	std::cout << "Radius size" << radius.size() << "\n";
-	for (auto& square : radius) {
-		std::cout << "Radius square X:" << square->xLocation << "  Y: " << square->yLocation << "\n";
+	UpdateRadius(occupiedSquares);
+	std::cout << "Radius size" << m_radius.size() << "\n";
+	for (auto& square : m_radius) {
 		if (square->isPlaced) {
+			std::cout << "RADIUS INFILTRATED\n";
 			return false;
 		}
 	}
 	return true;
 }
-std::vector<Tile*> Piece::GetRadius(std::string type, std::string facing, std::vector<Tile*> occupiedSquares, std::vector<Tile>& allSquares)
+void Piece::RefreshPiece() {
+	if (m_facing == "N") {
+		m_facing = "E";
+		return;
+	}
+	else if (m_facing == "E") {
+		m_facing = "S";
+		return;
+	}
+	else if (m_facing == "S") {
+		m_facing = "E";
+		return;
+	}
+	else if (m_facing == "E") {
+		m_facing = "N";
+		return;
+	}
+}
+
+void Piece::UpdateRadius(std::vector<Tile*> occupiedSquares)
 {
 	//Takes in the position of the occupied square, and returns a container around it
 	//that has a radius of all potential rotation widths
-	std::vector<Tile*> radius;
-	if (type == "Long") {
-		if (facing == "N") {
-			for (auto& occupiedSquare : occupiedSquares)
+	/*std::vector<Tile*> radius;*/
+	m_radius.clear();
+	if (m_type == "Long") {
+		if (m_facing == "N") {
+			for (auto& square : m_allSquares)
 			{
-				radius.push_back(occupiedSquare);
-				for (auto& square : allSquares)
+				for (auto& occupiedSquare : occupiedSquares)
 				{
 					if (square.xLocation == occupiedSquare->xLocation) {
 						if (square.yLocation == occupiedSquare->yLocation - 1 ||
+							square.yLocation == occupiedSquare->yLocation ||
 							square.yLocation == occupiedSquare->yLocation + 1 ||
 							square.yLocation == occupiedSquare->yLocation + 2) {
-							radius.push_back(&square);
+							auto it = std::find(m_radius.begin(), m_radius.end(), &square);
+							if (it == m_radius.end())
+								m_radius.push_back(&square);
 						}
 					}
 				}
 			}
 
 		}
-		else if (facing == "E") {
-			for (auto& occupiedSquare : occupiedSquares)
+		else if (m_facing == "E") {
+			for (auto& square : m_allSquares)
 			{
-				radius.push_back(occupiedSquare);
-				for (auto& square : allSquares)
+				for (auto& occupiedSquare : occupiedSquares)
 				{
 					if (square.yLocation == occupiedSquare->yLocation) {
 						if (square.xLocation == occupiedSquare->xLocation - 1 ||
+							square.xLocation == occupiedSquare->xLocation ||
 							square.xLocation == occupiedSquare->xLocation + 1 ||
 							square.xLocation == occupiedSquare->xLocation - 2) {
-							radius.push_back(&square);
+							auto it = std::find(m_radius.begin(), m_radius.end(), &square);
+							if (it == m_radius.end())
+								m_radius.push_back(&square);
 						}
 					}
 				}
 			}
 
 		}
-		if (facing == "S") {
-			for (auto& occupiedSquare : occupiedSquares)
+		else if (m_facing == "S") {
+			for (auto& square : m_allSquares)
 			{
-				radius.push_back(occupiedSquare);
-				for (auto& square : allSquares)
+				for (auto& occupiedSquare : occupiedSquares)
 				{
 					if (square.xLocation == occupiedSquare->xLocation) {
 						if (square.yLocation == occupiedSquare->yLocation - 1 ||
+							square.yLocation == occupiedSquare->yLocation ||
 							square.yLocation == occupiedSquare->yLocation - 2 ||
 							square.yLocation == occupiedSquare->yLocation + 1) {
-							radius.push_back(&square);
+							auto it = std::find(m_radius.begin(), m_radius.end(), &square);
+							if (it == m_radius.end())
+								m_radius.push_back(&square);
 						}
 					}
 				}
 			}
 
 		}
-		if (facing == "W") {
-			for (auto& occupiedSquare : occupiedSquares)
+		else if (m_facing == "W") {
+			for (auto& square : m_allSquares)
 			{
-				radius.push_back(occupiedSquare);
-				for (auto& square : allSquares)
+				for (auto& occupiedSquare : occupiedSquares)
 				{
 					if (square.yLocation == occupiedSquare->yLocation) {
 						if (square.xLocation == occupiedSquare->xLocation - 1 ||
+							square.xLocation == occupiedSquare->xLocation ||
 							square.xLocation == occupiedSquare->xLocation + 1 ||
 							square.xLocation == occupiedSquare->xLocation + 2) {
-							radius.push_back(&square);
+							auto it = std::find(m_radius.begin(), m_radius.end(), &square);
+							if (it == m_radius.end())
+								m_radius.push_back(&square);
 						}
 					}
 				}
 			}
 
 		}
-		return radius;
-	}
 
+	}
+	else {
+		std::cout <<"OTHER TYPE"<< m_type;
+		//branch out from center point to find radius.
+		//     | -x,-y | x,-y | +x,-y |
+		//     | -x, y |center| +x,y  |
+		//     | -x,+y | x,+y | +x,+y |
+
+		Tile* center = nullptr;
+		for (auto& os : m_allSquares)
+		{
+			if (os.isCenter) {
+				center = &os;
+				break;
+			}
+		}
+		if (center != nullptr) {
+			for (auto& tile : m_allSquares)
+			{
+				auto it = std::find(m_radius.begin(), m_radius.end(), &tile);
+
+				if (tile.yLocation == center->yLocation - 1) {
+					if (tile.xLocation == center->xLocation - 1 ||
+						tile.xLocation == center->xLocation ||
+						tile.xLocation == center->xLocation + 1)
+					{
+						if (it == m_radius.end()) {
+							m_radius.push_back(&tile);
+						}
+					}
+				}
+				if (tile.yLocation == center->yLocation) {
+					if (tile.xLocation == center->xLocation - 1 ||
+						tile.xLocation == center->xLocation ||
+						tile.xLocation == center->xLocation + 1)
+					{
+						if (it == m_radius.end()) {
+							m_radius.push_back(&tile);
+						}
+					}
+
+				}
+				if (tile.yLocation == center->yLocation + 1) {
+					if (tile.xLocation == center->xLocation - 1 ||
+						tile.xLocation == center->xLocation ||
+						tile.xLocation == center->xLocation + 1)
+					{
+						if (it == m_radius.end()) {
+							m_radius.push_back(&tile);
+						}
+					}
+				}
+			}
+		}
+	}
 }
+std::vector<Tile*> Piece::GetRadius() {
+	return m_radius;
+}
+

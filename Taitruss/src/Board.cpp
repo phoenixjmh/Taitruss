@@ -19,6 +19,7 @@ void Board::AddPiece(std::string type) {
 				}
 			}
 		}
+
 	}
 	if (type == "Long") {
 		currentType = type;
@@ -184,7 +185,10 @@ void Board::AddPiece(std::string type) {
 		}
 	}
 
-
+	UpdateVectors();
+	if (type != "" && occupiedSquares.size() > 0 && squareObjects.size() > 0)
+		currentPiece = new Piece(type, "N", occupiedSquares, squareObjects, WIDTH, HEIGHT);
+	else std::cout << "ERROR::Failed to create 'Piece' in Board::AddPiece function::ERROR\n";
 
 
 }
@@ -195,54 +199,65 @@ void Board::RotatePiece() {
 	std::cout << currentType << "TYPE in ROTATE\n";
 	//Clockwise Turn
 
-	if (Piece::CanRotate(currentType, currentFacing,occupiedSquares,squareObjects,WIDTH,HEIGHT)) {
-		
-	if (currentType == "Long") {
-		Tile* first = occupiedSquares.front();
-		Tile* last = occupiedSquares.back();
+	if (currentPiece->CanRotate(currentType, currentFacing, occupiedSquares, squareObjects, WIDTH, HEIGHT)) {
 
-		std::cout << "First y position" << first->yLocation << " Last y position" << last->yLocation << std::endl;
-		int pieceHeight = last->yLocation - first->yLocation + 1;
-		int middleYAxis = first->yLocation + (pieceHeight / 2);
-		int pieceWidth = last->xLocation - first->xLocation + 1;
-		int middleXAxis = first->xLocation + (pieceWidth / 2);
+		if (currentType == "Long") {
+			Tile* first = occupiedSquares.front();
+			Tile* last = occupiedSquares.back();
 
-		first = nullptr;
-		last = nullptr;
-		PauseUpdate();
-		RotateLogicFor_Long_Shape(currentFacing, pieceHeight, pieceWidth, middleXAxis, middleYAxis);
-		ResumeUpdate();
-	}
+			std::cout << "First y position" << first->yLocation << " Last y position" << last->yLocation << std::endl;
+			int pieceHeight = last->yLocation - first->yLocation + 1;
+			int middleYAxis = first->yLocation + (pieceHeight / 2);
+			int pieceWidth = last->xLocation - first->xLocation + 1;
+			int middleXAxis = first->xLocation + (pieceWidth / 2);
 
+			first = nullptr;
+			last = nullptr;
+			PauseUpdate();
+			RotateLogicFor_Long_Shape(currentFacing, pieceHeight, pieceWidth, middleXAxis, middleYAxis);
+			currentPiece->UpdateRadius(occupiedSquares);
+			currentPiece->RefreshPiece();
+			ResumeUpdate();
+		}
+
+		else if (currentType == "R") {
+			PauseUpdate();
+			RotateLogicFor_R_Shape();
+			currentPiece->UpdateRadius(occupiedSquares);
+			currentPiece->RefreshPiece();
+			ResumeUpdate();
+		}
+		else if (currentType == "L") {
+			PauseUpdate();
+			RotateLogicFor_L_Shape();
+			currentPiece->UpdateRadius(occupiedSquares);
+			currentPiece->RefreshPiece();
+			ResumeUpdate();
+		}
+		else if (currentType == "T") {
+			PauseUpdate();
+			RotateLogicFor_T_Shape();
+			currentPiece->UpdateRadius(occupiedSquares);
+			currentPiece->RefreshPiece();
+			ResumeUpdate();
+		}
+		else if (currentType == "S") {
+			PauseUpdate();
+			RotateLogicFor_S_Shape();
+			currentPiece->UpdateRadius(occupiedSquares);
+			currentPiece->RefreshPiece();
+			ResumeUpdate();
+		}
+		else if (currentType == "Z") {
+			PauseUpdate();
+			RotateLogicFor_Z_Shape();
+			currentPiece->UpdateRadius(occupiedSquares);
+			currentPiece->RefreshPiece();
+			ResumeUpdate();
+		}
 	}
-	else {
-		std::cout << "Can't rotate \n";
-	}
-	/*else if (currentType == "R") {
-		PauseUpdate();
-		RotateLogicFor_R_Shape();
-		ResumeUpdate();
-	}
-	else if (currentType == "L") {
-		PauseUpdate();
-		RotateLogicFor_L_Shape();
-		ResumeUpdate();
-	}
-	else if (currentType == "T") {
-		PauseUpdate();
-		RotateLogicFor_T_Shape();
-		ResumeUpdate();
-	}
-	else if (currentType == "S") {
-		PauseUpdate();
-		RotateLogicFor_S_Shape();
-		ResumeUpdate();
-	}
-	else if (currentType == "Z") {
-		PauseUpdate();
-		RotateLogicFor_Z_Shape();
-		ResumeUpdate();
-	}*/
+	else std::cout << "CANNOT ROTATE\n";
+
 
 
 }
@@ -322,7 +337,7 @@ void Board::RotateLogicFor_Long_Shape(std::string _facing, int pieceHeight, int 
 
 void Board::RotateLogicFor_R_Shape()
 {
-	
+
 	ClearSquares();
 	Tile* centerSquare = Tile::FindCenterSquare(occupiedSquares);
 	if (rotated) {
@@ -735,8 +750,6 @@ void Board::CheckClearRow()
 			int index = r * WIDTH + c;
 			if (index < squareObjects.size()) {
 				row.push_back(&squareObjects[index]);
-				std::cout << "Y: " << squareObjects[index].yLocation << " | " << "X: " << squareObjects[index].xLocation << "\n";
-
 			}
 		}
 		rows.push_back(row);
@@ -765,7 +778,7 @@ void Board::CheckClearRow()
 	//clear all rowsToClear
 	for (auto& r : rowsToClear)
 	{
-		ClearRow(r, clearIndex-1);
+		ClearRow(r, clearIndex - 1);
 	}
 
 
@@ -954,6 +967,9 @@ void Board::Move(std::string dir) {
 		//return;
 
 	}
+	UpdateVectors();
+	currentPiece->UpdateRadius(occupiedSquares);
+	//currentPiece->Print();
 	ResumeUpdate();
 }
 void Board::MoveDown() {
@@ -978,8 +994,11 @@ void Board::MoveDown() {
 			}
 		}
 	}
+	if (currentPiece != nullptr) {
+		currentPiece->UpdateRadius(occupiedSquares);
+	}
 	ResumeUpdate();
-	//PrintB();
+	PrintRadius();
 }
 void Board::UpdateVectors() {
 	//Find all occupied squares
@@ -1096,6 +1115,32 @@ void Board::PrintB() {
 			std::cout << "| " << i->facing << " |";
 		else
 			std::cout << "| " << "O" << " |";
+		if (counter >= WIDTH) {
+			std::cout << std::endl;
+			counter = 0;
+		}
+	}
+	std::cout << "----------------------------------" << std::endl;
+
+}
+void Board::PrintRadius() {
+	auto currRad = currentPiece->GetRadius();
+	std::cout << "currentPieceInfo " << currentPiece->m_type << "\n";
+	std::cout << "Radius size" << currRad.size();
+
+	int counter = 0;
+	std::cout << "----------------------------------" << std::endl;
+	for (int i = 0; i < squareObjects.size(); i++) {
+		counter++;
+		auto it = std::find(currRad.begin(), currRad.end(), &squareObjects[i]);
+
+		if (it != currRad.end()) {
+			std::cout << "| * |";
+		}
+		
+			
+		else
+			std::cout << "| " << " " << " |";
 		if (counter >= WIDTH) {
 			std::cout << std::endl;
 			counter = 0;

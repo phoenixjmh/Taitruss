@@ -24,6 +24,7 @@ public:
 	SDL_Texture* BlueSquare;
 	SDL_Texture* YellowSquare;
 	SDL_Texture* RedSquare;
+	Piece* currentPiece;
 	bool placed = false;
 	bool pauseUpdate = false;
 	void AddPiece(std::string type);
@@ -50,6 +51,7 @@ public:
 	void DrawBoard();
 	void Print();
 	void PrintB();
+	void PrintRadius();
 	bool CanRotate(std::string type, std::string facing);
 	Board(int res, SDL_Window* win)
 		:rotated{ false }, resolution{ res },
@@ -58,7 +60,8 @@ public:
 		YellowSquare{ TextureManager::LoadTexture("res/img/YellowSquare.png") },
 		RedSquare{ TextureManager::LoadTexture("res/img/RedSquare.png") },
 		pauseUpdate{ false }, src{ SDL_Rect{0,0,res,res} },
-		dest{ SDL_Rect { 0,0,resolution,resolution } }, dropPiece{ true }
+		dest{ SDL_Rect { 0,0,resolution,resolution } }, dropPiece{ true },
+		currentPiece{nullptr}
 
 
 	{

@@ -1,6 +1,6 @@
 #include "../headers/Engine.h"
 //#define db
-#define test3
+//#define test3
 
 void Engine::BeginSession(int resolution, SDL_Window* window) {
 	board = new Board(resolution, window);
