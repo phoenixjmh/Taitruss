@@ -189,12 +189,17 @@ void Board::AddPiece(std::string type) {
 
 }
 
+
+
 void Board::RotatePiece() {
 	std::cout << currentType << "TYPE in ROTATE\n";
 	//Clockwise Turn
+
+	if (Piece::CanRotate(currentType, currentFacing,occupiedSquares,squareObjects,WIDTH,HEIGHT)) {
+		
 	if (currentType == "Long") {
-		Square* first = occupiedSquares.front();
-		Square* last = occupiedSquares.back();
+		Tile* first = occupiedSquares.front();
+		Tile* last = occupiedSquares.back();
 
 		std::cout << "First y position" << first->yLocation << " Last y position" << last->yLocation << std::endl;
 		int pieceHeight = last->yLocation - first->yLocation + 1;
@@ -208,7 +213,12 @@ void Board::RotatePiece() {
 		RotateLogicFor_Long_Shape(currentFacing, pieceHeight, pieceWidth, middleXAxis, middleYAxis);
 		ResumeUpdate();
 	}
-	else if (currentType == "R") {
+
+	}
+	else {
+		std::cout << "Can't rotate \n";
+	}
+	/*else if (currentType == "R") {
 		PauseUpdate();
 		RotateLogicFor_R_Shape();
 		ResumeUpdate();
@@ -232,7 +242,7 @@ void Board::RotatePiece() {
 		PauseUpdate();
 		RotateLogicFor_Z_Shape();
 		ResumeUpdate();
-	}
+	}*/
 
 
 }
@@ -312,8 +322,9 @@ void Board::RotateLogicFor_Long_Shape(std::string _facing, int pieceHeight, int 
 
 void Board::RotateLogicFor_R_Shape()
 {
+	
 	ClearSquares();
-	Square* centerSquare = Square::FindCenterSquare(occupiedSquares);
+	Tile* centerSquare = Tile::FindCenterSquare(occupiedSquares);
 	if (rotated) {
 		return;
 	}
@@ -391,7 +402,7 @@ void Board::RotateLogicFor_R_Shape()
 void Board::RotateLogicFor_L_Shape()
 {
 	ClearSquares();
-	Square* centerSquare = Square::FindCenterSquare(occupiedSquares);
+	Tile* centerSquare = Tile::FindCenterSquare(occupiedSquares);
 	if (rotated) {
 		return;
 	}
@@ -470,7 +481,7 @@ void Board::RotateLogicFor_T_Shape()
 {
 
 	ClearSquares();
-	Square* centerSquare = Square::FindCenterSquare(occupiedSquares);
+	Tile* centerSquare = Tile::FindCenterSquare(occupiedSquares);
 	if (rotated) {
 		return;
 	}
@@ -551,7 +562,7 @@ void Board::RotateLogicFor_S_Shape()
 {
 
 	ClearSquares();
-	Square* centerSquare = Square::FindCenterSquare(occupiedSquares);
+	Tile* centerSquare = Tile::FindCenterSquare(occupiedSquares);
 	if (rotated) {
 		return;
 	}
@@ -631,7 +642,7 @@ void Board::RotateLogicFor_Z_Shape()
 {
 
 	ClearSquares();
-	Square* centerSquare = Square::FindCenterSquare(occupiedSquares);
+	Tile* centerSquare = Tile::FindCenterSquare(occupiedSquares);
 	if (rotated) {
 		return;
 	}
@@ -710,11 +721,11 @@ void Board::RotateLogicFor_Z_Shape()
 
 void Board::CheckClearRow()
 {
-	std::vector<std::vector<Square*>> rows;
+	std::vector<std::vector<Tile*>> rows;
 	//Check each row
 	for (int r = 0; r < HEIGHT; r++)
 	{
-		std::vector<Square*> row;
+		std::vector<Tile*> row;
 		//if yposition==HEIGHT
 		// count amount of xPositions that are filled in that height
 		//if count>WIDTH
@@ -733,7 +744,7 @@ void Board::CheckClearRow()
 
 	//std::cout << rows.size() * rows[0].size() << "   " << squareObjects.size() << std::endl;
 	int clearIndex = 0;
-	std::vector<std::vector<Square*>> rowsToClear;
+	std::vector<std::vector<Tile*>> rowsToClear;
 	for (auto& row : rows) {
 		++clearIndex;
 		int occupiedInRow = 0;
@@ -760,7 +771,7 @@ void Board::CheckClearRow()
 
 }
 
-void Board::ClearRow(std::vector<Square*>& rowToClear, int index) {
+void Board::ClearRow(std::vector<Tile*>& rowToClear, int index) {
 	std::cout << "CLEARING ROW \n";
 	for (auto& s : rowToClear) {
 		s->isPlaced = false;

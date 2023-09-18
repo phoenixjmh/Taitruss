@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Piece.cpp" />
     <ClCompile Include="src\Board.cpp" />
     <ClCompile Include="src\Engine.cpp" />
     <ClCompile Include="src\EventManager.cpp" />
@@ -32,6 +33,7 @@
     <ClInclude Include="headers\Engine.h" />
     <ClInclude Include="headers\EventManager.h" />
     <ClInclude Include="headers\Interface.h" />
+    <ClInclude Include="headers\Piece.h" />
     <ClInclude Include="headers\Square.h" />
     <ClInclude Include="headers\TextureManager.h" />
   </ItemGroup>

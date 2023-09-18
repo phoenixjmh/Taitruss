@@ -1,8 +1,9 @@
 #pragma once
 #include <vector>
-#include "Square.h"
+#include "Tile.h"
 #include <SDL_rect.h>
 #include "TextureManager.h"
+#include "Piece.h"
 
 class Board {
 public:
@@ -10,9 +11,9 @@ public:
 	int resolution;
 	int rowToClearIndex = 0;
 	SDL_Rect src, dest;
-	std::vector<Square> squareObjects;
-	std::vector<Square*> occupiedSquares;
-	std::vector<Square*> placedSquares;
+	std::vector<Tile> squareObjects;
+	std::vector<Tile*> occupiedSquares;
+	std::vector<Tile*> placedSquares;
 	int winWidth = 0, winHeight = 0;
 	static const int HEIGHT = 15;
 	static const int WIDTH = 10;
@@ -37,7 +38,7 @@ public:
 	void RotateLogicFor_S_Shape();
 	void RotateLogicFor_Z_Shape();
 	void CheckClearRow();
-	void ClearRow(std::vector<Square*>& rowToClear, int index);
+	void ClearRow(std::vector<Tile*>& rowToClear, int index);
 	void MovePlacedDown(int index);
 	void ClearSquares();
 	bool CanMove(std::string dir);
@@ -49,6 +50,7 @@ public:
 	void DrawBoard();
 	void Print();
 	void PrintB();
+	bool CanRotate(std::string type, std::string facing);
 	Board(int res, SDL_Window* win)
 		:rotated{ false }, resolution{ res },
 		BlankSquare{ TextureManager::LoadTexture("res/img/BlankSquare.png") },
@@ -66,7 +68,7 @@ public:
 		{
 			for (int y = 0; y < WIDTH; y++)
 			{
-				Square square(y, i);
+				Tile square(y, i);
 				this->squareObjects.push_back(square);
 			}
 		}
