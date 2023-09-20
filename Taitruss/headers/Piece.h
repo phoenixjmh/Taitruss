@@ -7,6 +7,8 @@ public:
 	bool CanRotate(std::string type, std::string facing, std::vector<Tile*> occupiedSquares, std::vector<Tile>& allSquares, int WIDTH, int HEIGHT);
 	std::string m_type;
 	std::string m_facing;
+	std::vector<Tile*> os;
+
 	void UpdateRadius(std::vector<Tile*> occupiedSquares);
 	std::vector<Tile*> GetRadius();
 	void RefreshPiece();
@@ -17,7 +19,9 @@ public:
 	Piece(std::string type, std::string facing, std::vector<Tile*> occupiedSquares, std::vector<Tile>& allSquares, int WIDTH, int HEIGHT) :
 		m_type{ type },
 		m_facing{ facing },
-		m_allSquares{ allSquares }
+		m_allSquares{ allSquares },
+		os{occupiedSquares}
+		
 
 
 

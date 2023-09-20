@@ -80,6 +80,83 @@ void Piece::RefreshPiece() {
 	}
 }
 
+void Piece::Rotate()
+{
+	//copy every square with corresponding name
+	//rotate the whole piece
+	//full reassignment version
+	Tile* tile0 = new Tile;
+	Tile* tile1 = new Tile;
+	Tile* tile2 = new Tile;
+	Tile* tile3 = new Tile;
+	Tile* tile4 = new Tile;
+	Tile* tile5 = new Tile;
+	Tile* tile6 = new Tile;
+	Tile* tile7 = new Tile;
+	Tile* tile8 = new Tile;
+	//assign tiles to index[0-9] using relativePos, assigned in updateRadius
+	for (auto& tile : m_radius)
+	{
+		switch (tile->relativePos) {
+		case 0:
+			tile0 = tile;
+			break;
+		case 1:
+			tile1 = tile;
+			break;
+		case 2:
+			tile2 = tile;
+			break;
+		case 3:
+			tile3 = tile;
+			break;
+		case 4:
+			tile4 = tile;
+			break;
+		case 5:
+			tile5 = tile;
+			break;
+		case 6:
+			tile6 = tile;
+			break;
+		case 7:
+			tile7 = tile;
+			break;
+		case 8:
+			tile8 = tile;
+			break;
+		default:
+			break;
+		}
+	}
+	//copy contents
+	Tile tile0Copy = *tile0;
+	Tile tile1Copy = *tile1;
+	Tile tile2Copy = *tile2;
+	Tile tile3Copy = *tile3;
+	Tile tile4Copy = *tile4;
+	Tile tile5Copy = *tile5;
+	Tile tile6Copy = *tile6; 
+	Tile tile7Copy = *tile7;
+	Tile tile8Copy = *tile8;
+
+	//reassign
+	std::cout << "Tile 2: " << tile2->isOccupied << "  Tile0 Copy:  " << tile2Copy.isOccupied << "\n";
+
+	*tile0 = tile6Copy;
+	*tile1 = tile3Copy;
+	*tile2 = tile0Copy;
+	*tile3 = tile7Copy;
+	*tile4 = *tile4;
+	*tile5 = tile1Copy;
+	*tile6 = tile8Copy;
+	*tile7 = tile5Copy;
+	*tile8 = tile2Copy;
+
+	std::cout << "Copy completed brute reassignment\n" << "Tile 2: " << tile2->isOccupied << "\n";
+	std::cout << "CENTER FROM ROTATE SCRIPT" << tile4->xLocation << tile4->yLocation << "\n";
+}
+
 void Piece::UpdateRadius(std::vector<Tile*> occupiedSquares)
 {
 	//Takes in the position of the occupied square, and returns a container around it
@@ -98,8 +175,10 @@ void Piece::UpdateRadius(std::vector<Tile*> occupiedSquares)
 							square.yLocation == occupiedSquare->yLocation + 1 ||
 							square.yLocation == occupiedSquare->yLocation + 2) {
 							auto it = std::find(m_radius.begin(), m_radius.end(), &square);
-							if (it == m_radius.end())
+							if (it == m_radius.end()) {
+								square.isRadius = true;
 								m_radius.push_back(&square);
+							}
 						}
 					}
 				}
@@ -117,8 +196,10 @@ void Piece::UpdateRadius(std::vector<Tile*> occupiedSquares)
 							square.xLocation == occupiedSquare->xLocation + 1 ||
 							square.xLocation == occupiedSquare->xLocation - 2) {
 							auto it = std::find(m_radius.begin(), m_radius.end(), &square);
-							if (it == m_radius.end())
+							if (it == m_radius.end()) {
+								square.isRadius = true;
 								m_radius.push_back(&square);
+							}
 						}
 					}
 				}
@@ -137,7 +218,10 @@ void Piece::UpdateRadius(std::vector<Tile*> occupiedSquares)
 							square.yLocation == occupiedSquare->yLocation + 1) {
 							auto it = std::find(m_radius.begin(), m_radius.end(), &square);
 							if (it == m_radius.end())
+							{
+								square.isRadius = true;
 								m_radius.push_back(&square);
+							}
 						}
 					}
 				}
@@ -156,7 +240,10 @@ void Piece::UpdateRadius(std::vector<Tile*> occupiedSquares)
 							square.xLocation == occupiedSquare->xLocation + 2) {
 							auto it = std::find(m_radius.begin(), m_radius.end(), &square);
 							if (it == m_radius.end())
+							{
+								square.isRadius = true;
 								m_radius.push_back(&square);
+							}
 						}
 					}
 				}
@@ -166,33 +253,41 @@ void Piece::UpdateRadius(std::vector<Tile*> occupiedSquares)
 
 	}
 	else {
-		std::cout <<"OTHER TYPE"<< m_type;
 		//branch out from center point to find radius.
 		//     | -x,-y | x,-y | +x,-y |
 		//     | -x, y |center| +x,y  |
 		//     | -x,+y | x,+y | +x,+y |
 
-		Tile* center = nullptr;
-		for (auto& os : m_allSquares)
+		Tile* center = new Tile;
+		for (auto& c : m_allSquares)
 		{
-			if (os.isCenter) {
-				center = &os;
-				break;
+			if (c.isCenter) {
+				center = &c;
 			}
 		}
 		if (center != nullptr) {
 			for (auto& tile : m_allSquares)
 			{
-				auto it = std::find(m_radius.begin(), m_radius.end(), &tile);
+				tile.isRadius = false;
+				tile.relativePos = NONE;
 
 				if (tile.yLocation == center->yLocation - 1) {
 					if (tile.xLocation == center->xLocation - 1 ||
 						tile.xLocation == center->xLocation ||
 						tile.xLocation == center->xLocation + 1)
 					{
-						if (it == m_radius.end()) {
-							m_radius.push_back(&tile);
+						//assign this square it's relativepos name
+						if (tile.xLocation == center->xLocation - 1) {
+							tile.relativePos = TL;
 						}
+						if (tile.xLocation == center->xLocation) {
+							tile.relativePos = TM;
+						}
+						if (tile.xLocation == center->xLocation + 1) {
+							tile.relativePos = TR;
+						}
+						tile.isRadius = true;
+						m_radius.push_back(&tile);
 					}
 				}
 				if (tile.yLocation == center->yLocation) {
@@ -200,9 +295,17 @@ void Piece::UpdateRadius(std::vector<Tile*> occupiedSquares)
 						tile.xLocation == center->xLocation ||
 						tile.xLocation == center->xLocation + 1)
 					{
-						if (it == m_radius.end()) {
-							m_radius.push_back(&tile);
+						if (tile.xLocation == center->xLocation - 1) {
+							tile.relativePos = ML;
 						}
+						if (tile.xLocation == center->xLocation) {
+							tile.relativePos = MM;
+						}
+						if (tile.xLocation == center->xLocation + 1) {
+							tile.relativePos = MR;
+						}
+						tile.isRadius = true;
+						m_radius.push_back(&tile);
 					}
 
 				}
@@ -211,15 +314,24 @@ void Piece::UpdateRadius(std::vector<Tile*> occupiedSquares)
 						tile.xLocation == center->xLocation ||
 						tile.xLocation == center->xLocation + 1)
 					{
-						if (it == m_radius.end()) {
-							m_radius.push_back(&tile);
+						if (tile.xLocation == center->xLocation - 1) {
+							tile.relativePos = BL;
 						}
+						if (tile.xLocation == center->xLocation) {
+							tile.relativePos = BM;
+						}
+						if (tile.xLocation == center->xLocation + 1) {
+							tile.relativePos = BR;
+						}
+						tile.isRadius = true;
+						m_radius.push_back(&tile);
 					}
 				}
 			}
 		}
 	}
 }
+
 std::vector<Tile*> Piece::GetRadius() {
 	return m_radius;
 }

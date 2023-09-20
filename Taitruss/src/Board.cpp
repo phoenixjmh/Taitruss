@@ -4,7 +4,7 @@
 
 void Board::AddPiece(std::string type) {
 	dropPiece = false;
-
+	Tile* center = new Tile;
 	if (type == "Square") {
 		currentType = type;
 
@@ -37,6 +37,8 @@ void Board::AddPiece(std::string type) {
 			}
 		}
 	}
+
+
 	if (type == "R") {
 		currentType = type;
 		std::cout << "Added " << type << " to board" << std::endl;
@@ -52,6 +54,7 @@ void Board::AddPiece(std::string type) {
 			if (s.yLocation == 1) {
 				if (s.xLocation == (WIDTH / 2)) {
 					s.isCenter = true;
+					center = &s;
 				}
 			}
 			if (s.yLocation == 1) {
@@ -80,6 +83,7 @@ void Board::AddPiece(std::string type) {
 			if (s.yLocation == 1) {
 				if (s.xLocation == (WIDTH / 2)) {
 					s.isCenter = true;
+					center = &s;
 				}
 			}
 			if (s.yLocation == 1) {
@@ -109,6 +113,7 @@ void Board::AddPiece(std::string type) {
 			if (s.yLocation == 1) {
 				if (s.xLocation == (WIDTH / 2)) {
 					s.isCenter = true;
+					center = &s;
 					s.type = type;
 					s.isOccupied = true;
 					s.facing = "N";
@@ -139,6 +144,7 @@ void Board::AddPiece(std::string type) {
 			}
 			if (s.yLocation == 1) {
 				if (s.xLocation == (WIDTH / 2)) {
+					center = &s;
 					s.isCenter = true;
 					s.type = type;
 					s.isOccupied = true;
@@ -170,6 +176,7 @@ void Board::AddPiece(std::string type) {
 			}
 			if (s.yLocation == 1) {
 				if (s.xLocation == (WIDTH / 2)) {
+					center = &s;
 					s.isCenter = true;
 				}
 			}
@@ -196,7 +203,6 @@ void Board::AddPiece(std::string type) {
 
 
 void Board::RotatePiece() {
-	std::cout << currentType << "TYPE in ROTATE\n";
 	//Clockwise Turn
 
 	if (currentPiece->CanRotate(currentType, currentFacing, occupiedSquares, squareObjects, WIDTH, HEIGHT)) {
@@ -219,54 +225,22 @@ void Board::RotatePiece() {
 			currentPiece->RefreshPiece();
 			ResumeUpdate();
 		}
+		else if (currentType != "Long") {
+			PauseUpdate();
+			currentPiece->Rotate();
+			currentPiece->RefreshPiece();
+			ResumeUpdate();
+		}
 
-		else if (currentType == "R") {
-			PauseUpdate();
-			RotateLogicFor_R_Shape();
-			currentPiece->UpdateRadius(occupiedSquares);
-			currentPiece->RefreshPiece();
-			ResumeUpdate();
-		}
-		else if (currentType == "L") {
-			PauseUpdate();
-			RotateLogicFor_L_Shape();
-			currentPiece->UpdateRadius(occupiedSquares);
-			currentPiece->RefreshPiece();
-			ResumeUpdate();
-		}
-		else if (currentType == "T") {
-			PauseUpdate();
-			RotateLogicFor_T_Shape();
-			currentPiece->UpdateRadius(occupiedSquares);
-			currentPiece->RefreshPiece();
-			ResumeUpdate();
-		}
-		else if (currentType == "S") {
-			PauseUpdate();
-			RotateLogicFor_S_Shape();
-			currentPiece->UpdateRadius(occupiedSquares);
-			currentPiece->RefreshPiece();
-			ResumeUpdate();
-		}
-		else if (currentType == "Z") {
-			PauseUpdate();
-			RotateLogicFor_Z_Shape();
-			currentPiece->UpdateRadius(occupiedSquares);
-			currentPiece->RefreshPiece();
-			ResumeUpdate();
-		}
+
+
 	}
 	else std::cout << "CANNOT ROTATE\n";
 
 
 
 }
-void Board::PauseUpdate() {
-	pauseUpdate = true;
-}
-void Board::ResumeUpdate() {
-	pauseUpdate = false;
-}
+
 void Board::RotateLogicFor_Long_Shape(std::string _facing, int pieceHeight, int pieceWidth, int middleXAxis, int middleYAxis) {
 	if (rotated)
 		return;
@@ -335,405 +309,6 @@ void Board::RotateLogicFor_Long_Shape(std::string _facing, int pieceHeight, int 
 	rotated = false;
 }
 
-void Board::RotateLogicFor_R_Shape()
-{
-
-	ClearSquares();
-	Tile* centerSquare = Tile::FindCenterSquare(occupiedSquares);
-	if (rotated) {
-		return;
-	}
-	if (currentFacing == "N") {
-		for (auto& s : squareObjects) {
-			if (s.xLocation == centerSquare->xLocation && s.yLocation == centerSquare->yLocation - 1 ||
-				s.xLocation == centerSquare->xLocation + 1 && s.yLocation == centerSquare->yLocation - 1 ||
-				s.xLocation == centerSquare->xLocation && s.yLocation == centerSquare->yLocation ||
-				s.xLocation == centerSquare->xLocation && s.yLocation == centerSquare->yLocation + 1) {
-				s.isOccupied = true;
-				s.type = currentType;
-				s.facing = "E";
-				rotated = "true";
-				if (s.xLocation == centerSquare->xLocation && s.yLocation == centerSquare->yLocation + 1) {
-					s.isCenter = true;
-				}
-			}
-
-
-		}
-
-	}
-	else if (currentFacing == "E") {
-		for (auto& s : squareObjects) {
-			if (s.xLocation == centerSquare->xLocation - 1 && s.yLocation == centerSquare->yLocation ||
-				s.xLocation == centerSquare->xLocation && s.yLocation == centerSquare->yLocation ||
-				s.xLocation == centerSquare->xLocation + 1 && s.yLocation == centerSquare->yLocation ||
-				s.xLocation == centerSquare->xLocation + 1 && s.yLocation == centerSquare->yLocation + 1) {
-				s.isOccupied = true;
-				s.type = currentType;
-				s.facing = "S";
-				rotated = "true";
-				if (s.xLocation == centerSquare->xLocation && s.yLocation == centerSquare->yLocation + 1) {
-					s.isCenter = true;
-				}
-			}
-		}
-	}
-	//
-	else if (currentFacing == "S") {
-		for (auto& s : squareObjects) {
-			if (s.xLocation == centerSquare->xLocation && s.yLocation == centerSquare->yLocation - 1 ||
-				s.xLocation == centerSquare->xLocation && s.yLocation == centerSquare->yLocation ||
-				s.xLocation == centerSquare->xLocation && s.yLocation == centerSquare->yLocation + 1 ||
-				s.xLocation == centerSquare->xLocation - 1 && s.yLocation == centerSquare->yLocation + 1) {
-				s.isOccupied = true;
-				s.type = currentType;
-				s.facing = "W";
-				rotated = "true";
-				if (s.xLocation == centerSquare->xLocation && s.yLocation == centerSquare->yLocation + 1) {
-					s.isCenter = true;
-				}
-			}
-		}
-	}
-	else if (currentFacing == "W") {
-		for (auto& s : squareObjects) {
-			if (s.xLocation == centerSquare->xLocation - 1 && s.yLocation == centerSquare->yLocation ||
-				s.xLocation == centerSquare->xLocation && s.yLocation == centerSquare->yLocation ||
-				s.xLocation == centerSquare->xLocation + 1 && s.yLocation == centerSquare->yLocation ||
-				s.xLocation == centerSquare->xLocation - 1 && s.yLocation == centerSquare->yLocation - 1) {
-				s.isOccupied = true;
-				s.type = currentType;
-				s.facing = "N";
-				rotated = "true";
-				if (s.xLocation == centerSquare->xLocation && s.yLocation == centerSquare->yLocation + 1) {
-					s.isCenter = true;
-				}
-			}
-		}
-	}
-	rotated = false;
-}
-
-void Board::RotateLogicFor_L_Shape()
-{
-	ClearSquares();
-	Tile* centerSquare = Tile::FindCenterSquare(occupiedSquares);
-	if (rotated) {
-		return;
-	}
-	if (currentFacing == "N") {
-		for (auto& s : squareObjects) {
-			if (s.xLocation == centerSquare->xLocation && s.yLocation == centerSquare->yLocation - 1 || //top
-				s.xLocation == centerSquare->xLocation + 1 && s.yLocation == centerSquare->yLocation + 1 ||
-				s.xLocation == centerSquare->xLocation && s.yLocation == centerSquare->yLocation || //mid
-				s.xLocation == centerSquare->xLocation && s.yLocation == centerSquare->yLocation + 1) {
-				s.isOccupied = true;
-				s.type = currentType;
-				s.facing = "E";
-				rotated = "true";
-				if (s.xLocation == centerSquare->xLocation && s.yLocation == centerSquare->yLocation + 1) {
-					s.isCenter = true;
-				}
-			}
-
-
-		}
-
-	}
-	else if (currentFacing == "E") {
-		for (auto& s : squareObjects) {
-			if (s.xLocation == centerSquare->xLocation - 1 && s.yLocation == centerSquare->yLocation ||
-				s.xLocation == centerSquare->xLocation && s.yLocation == centerSquare->yLocation ||
-				s.xLocation == centerSquare->xLocation + 1 && s.yLocation == centerSquare->yLocation ||
-				s.xLocation == centerSquare->xLocation - 1 && s.yLocation == centerSquare->yLocation + 1) {
-				s.isOccupied = true;
-				s.type = currentType;
-				s.facing = "S";
-				rotated = "true";
-				if (s.xLocation == centerSquare->xLocation && s.yLocation == centerSquare->yLocation + 1) {
-					s.isCenter = true;
-				}
-			}
-		}
-	}
-	//
-	else if (currentFacing == "S") {
-		for (auto& s : squareObjects) {
-			if (s.xLocation == centerSquare->xLocation && s.yLocation == centerSquare->yLocation - 1 ||
-				s.xLocation == centerSquare->xLocation && s.yLocation == centerSquare->yLocation ||
-				s.xLocation == centerSquare->xLocation && s.yLocation == centerSquare->yLocation + 1 ||
-				s.xLocation == centerSquare->xLocation - 1 && s.yLocation == centerSquare->yLocation - 1) {
-				s.isOccupied = true;
-				s.type = currentType;
-				s.facing = "W";
-				rotated = "true";
-				if (s.xLocation == centerSquare->xLocation && s.yLocation == centerSquare->yLocation + 1) {
-					s.isCenter = true;
-				}
-			}
-		}
-	}
-	else if (currentFacing == "W") {
-		for (auto& s : squareObjects) {
-			if (s.xLocation == centerSquare->xLocation - 1 && s.yLocation == centerSquare->yLocation ||
-				s.xLocation == centerSquare->xLocation && s.yLocation == centerSquare->yLocation ||
-				s.xLocation == centerSquare->xLocation + 1 && s.yLocation == centerSquare->yLocation ||
-				s.xLocation == centerSquare->xLocation + 1 && s.yLocation == centerSquare->yLocation - 1) {
-				s.isOccupied = true;
-				s.type = currentType;
-				s.facing = "N";
-				rotated = "true";
-				if (s.xLocation == centerSquare->xLocation && s.yLocation == centerSquare->yLocation + 1) {
-					s.isCenter = true;
-				}
-			}
-		}
-	}
-	rotated = false;
-}
-
-void Board::RotateLogicFor_T_Shape()
-{
-
-	ClearSquares();
-	Tile* centerSquare = Tile::FindCenterSquare(occupiedSquares);
-	if (rotated) {
-		return;
-	}
-	if (currentFacing == "N") {
-		for (auto& s : squareObjects) {
-			if (s.xLocation == centerSquare->xLocation && s.yLocation == centerSquare->yLocation || //CENTER
-				s.xLocation == centerSquare->xLocation && s.yLocation == centerSquare->yLocation - 1 ||//TOP
-				s.xLocation == centerSquare->xLocation && s.yLocation == centerSquare->yLocation + 1 || //BOTTOM
-				s.xLocation == centerSquare->xLocation + 1 && s.yLocation == centerSquare->yLocation) { //RIGHT
-				s.isOccupied = true;
-				s.type = currentType;
-				s.facing = "E";
-				rotated = "true";
-				if (s.xLocation == centerSquare->xLocation && s.yLocation == centerSquare->yLocation + 1) {
-					s.isCenter = true;
-				}
-			}
-
-
-		}
-
-	}
-	else if (currentFacing == "E") {
-		for (auto& s : squareObjects) {
-			if (s.xLocation == centerSquare->xLocation && s.yLocation == centerSquare->yLocation || //CENTER
-				s.xLocation == centerSquare->xLocation && s.yLocation == centerSquare->yLocation + 1 ||//BOTTOM
-				s.xLocation == centerSquare->xLocation - 1 && s.yLocation == centerSquare->yLocation || //LEFT
-				s.xLocation == centerSquare->xLocation + 1 && s.yLocation == centerSquare->yLocation)//RIGHT {
-			{
-				s.isOccupied = true;
-				s.type = currentType;
-				s.facing = "S";
-				rotated = "true";
-				if (s.xLocation == centerSquare->xLocation && s.yLocation == centerSquare->yLocation + 1) {
-					s.isCenter = true;
-				}
-			}
-		}
-	}
-
-	//
-	else if (currentFacing == "S") {
-		for (auto& s : squareObjects) {
-			if (s.xLocation == centerSquare->xLocation && s.yLocation == centerSquare->yLocation || //CENTER
-				s.xLocation == centerSquare->xLocation - 1 && s.yLocation == centerSquare->yLocation ||//LEFT
-				s.xLocation == centerSquare->xLocation && s.yLocation == centerSquare->yLocation + 1 ||//BOTTOM
-				s.xLocation == centerSquare->xLocation && s.yLocation == centerSquare->yLocation - 1) { //TOP
-				s.isOccupied = true;
-				s.type = currentType;
-				s.facing = "W";
-				rotated = "true";
-				if (s.xLocation == centerSquare->xLocation && s.yLocation == centerSquare->yLocation + 1) {
-					s.isCenter = true;
-				}
-			}
-		}
-	}
-	else if (currentFacing == "W") {
-		for (auto& s : squareObjects) {
-			if (s.xLocation == centerSquare->xLocation && s.yLocation == centerSquare->yLocation || //CENTER
-				s.xLocation == centerSquare->xLocation && s.yLocation == centerSquare->yLocation - 1 ||//TOP
-				s.xLocation == centerSquare->xLocation - 1 && s.yLocation == centerSquare->yLocation ||//LEFT
-				s.xLocation == centerSquare->xLocation + 1 && s.yLocation == centerSquare->yLocation) {//RIGHT
-				s.isOccupied = true;
-				s.type = currentType;
-				s.facing = "N";
-				rotated = "true";
-				if (s.xLocation == centerSquare->xLocation && s.yLocation == centerSquare->yLocation + 1) {
-					s.isCenter = true;
-				}
-			}
-		}
-	}
-	rotated = false;
-}
-
-void Board::RotateLogicFor_S_Shape()
-{
-
-	ClearSquares();
-	Tile* centerSquare = Tile::FindCenterSquare(occupiedSquares);
-	if (rotated) {
-		return;
-	}
-	if (currentFacing == "N") {
-		for (auto& s : squareObjects) {
-			if (s.xLocation == centerSquare->xLocation && s.yLocation == centerSquare->yLocation || //CENTER
-				s.xLocation == centerSquare->xLocation + 1 && s.yLocation == centerSquare->yLocation ||//RIGHT
-				s.xLocation == centerSquare->xLocation + 1 && s.yLocation == centerSquare->yLocation + 1 || //RIGHT BOTTOM
-				s.xLocation == centerSquare->xLocation && s.yLocation == centerSquare->yLocation - 1) { //TOP
-				s.isOccupied = true;
-				s.type = currentType;
-				s.facing = "E";
-				rotated = "true";
-				if (s.xLocation == centerSquare->xLocation && s.yLocation == centerSquare->yLocation + 1) {
-					s.isCenter = true;
-				}
-			}
-
-
-		}
-
-	}
-	else if (currentFacing == "E") {
-		for (auto& s : squareObjects) {
-			if (s.xLocation == centerSquare->xLocation && s.yLocation == centerSquare->yLocation || //CENTER
-				s.xLocation == centerSquare->xLocation + 1 && s.yLocation == centerSquare->yLocation ||//RIGHT
-				s.xLocation == centerSquare->xLocation && s.yLocation == centerSquare->yLocation + 1 || //BOTTOM
-				s.xLocation == centerSquare->xLocation - 1 && s.yLocation == centerSquare->yLocation + 1)//BOTTOMLEFT 
-			{
-				s.isOccupied = true;
-				s.type = currentType;
-				s.facing = "S";
-				rotated = "true";
-				if (s.xLocation == centerSquare->xLocation && s.yLocation == centerSquare->yLocation + 1) {
-					s.isCenter = true;
-				}
-			}
-		}
-	}
-
-	//
-	else if (currentFacing == "S") {
-		for (auto& s : squareObjects) {
-			if (s.xLocation == centerSquare->xLocation && s.yLocation == centerSquare->yLocation || //CENTER
-				s.xLocation == centerSquare->xLocation - 1 && s.yLocation == centerSquare->yLocation - 1 ||//TOP LEFT
-				s.xLocation == centerSquare->xLocation && s.yLocation == centerSquare->yLocation + 1 ||//BOTTOM
-				s.xLocation == centerSquare->xLocation - 1 && s.yLocation == centerSquare->yLocation) { //LEFT
-				s.isOccupied = true;
-				s.type = currentType;
-				s.facing = "W";
-				rotated = "true";
-				if (s.xLocation == centerSquare->xLocation && s.yLocation == centerSquare->yLocation + 1) {
-					s.isCenter = true;
-				}
-			}
-		}
-	}
-	else if (currentFacing == "W") {
-		for (auto& s : squareObjects) {
-			if (s.xLocation == centerSquare->xLocation && s.yLocation == centerSquare->yLocation || //CENTER
-				s.xLocation == centerSquare->xLocation && s.yLocation == centerSquare->yLocation - 1 ||//TOP
-				s.xLocation == centerSquare->xLocation - 1 && s.yLocation == centerSquare->yLocation ||//LEFT
-				s.xLocation == centerSquare->xLocation + 1 && s.yLocation == centerSquare->yLocation - 1) {// TOP RIGHT
-				s.isOccupied = true;
-				s.type = currentType;
-				s.facing = "N";
-				rotated = "true";
-				if (s.xLocation == centerSquare->xLocation && s.yLocation == centerSquare->yLocation + 1) {
-					s.isCenter = true;
-				}
-			}
-		}
-	}
-	rotated = false;
-}
-void Board::RotateLogicFor_Z_Shape()
-{
-
-	ClearSquares();
-	Tile* centerSquare = Tile::FindCenterSquare(occupiedSquares);
-	if (rotated) {
-		return;
-	}
-	if (currentFacing == "N") {
-		for (auto& s : squareObjects) {
-			if (s.xLocation == centerSquare->xLocation && s.yLocation == centerSquare->yLocation || //CENTER
-				s.xLocation == centerSquare->xLocation + 1 && s.yLocation == centerSquare->yLocation ||//RIGHT
-				s.xLocation == centerSquare->xLocation + 1 && s.yLocation == centerSquare->yLocation - 1 || //TOP RIGHT
-				s.xLocation == centerSquare->xLocation && s.yLocation == centerSquare->yLocation + 1) { //BOTTOM
-				s.isOccupied = true;
-				s.type = currentType;
-				s.facing = "E";
-				rotated = "true";
-				if (s.xLocation == centerSquare->xLocation && s.yLocation == centerSquare->yLocation + 1) {
-					s.isCenter = true;
-				}
-			}
-
-
-		}
-
-	}
-	else if (currentFacing == "E") {
-		for (auto& s : squareObjects) {
-			if (s.xLocation == centerSquare->xLocation && s.yLocation == centerSquare->yLocation || //CENTER
-				s.xLocation == centerSquare->xLocation - 1 && s.yLocation == centerSquare->yLocation ||//LEFT
-				s.xLocation == centerSquare->xLocation && s.yLocation == centerSquare->yLocation + 1 || //BOTTOM
-				s.xLocation == centerSquare->xLocation + 1 && s.yLocation == centerSquare->yLocation + 1)//BOTTOMRIGHT 
-			{
-				s.isOccupied = true;
-				s.type = currentType;
-				s.facing = "S";
-				rotated = "true";
-				if (s.xLocation == centerSquare->xLocation && s.yLocation == centerSquare->yLocation + 1) {
-					s.isCenter = true;
-				}
-			}
-		}
-	}
-
-	//
-	else if (currentFacing == "S") {
-		for (auto& s : squareObjects) {
-			if (s.xLocation == centerSquare->xLocation && s.yLocation == centerSquare->yLocation || //CENTER
-				s.xLocation == centerSquare->xLocation && s.yLocation == centerSquare->yLocation - 1 ||//TOP
-				s.xLocation == centerSquare->xLocation - 1 && s.yLocation == centerSquare->yLocation + 1 ||//BOTTOM LEFT
-				s.xLocation == centerSquare->xLocation - 1 && s.yLocation == centerSquare->yLocation) { //LEFT
-				s.isOccupied = true;
-				s.type = currentType;
-				s.facing = "W";
-				rotated = "true";
-				if (s.xLocation == centerSquare->xLocation && s.yLocation == centerSquare->yLocation + 1) {
-					s.isCenter = true;
-				}
-			}
-		}
-	}
-	else if (currentFacing == "W") {
-		for (auto& s : squareObjects) {
-			if (s.xLocation == centerSquare->xLocation && s.yLocation == centerSquare->yLocation || //CENTER
-				s.xLocation == centerSquare->xLocation && s.yLocation == centerSquare->yLocation - 1 ||//TOP
-				s.xLocation == centerSquare->xLocation + 1 && s.yLocation == centerSquare->yLocation ||//RIGHT
-				s.xLocation == centerSquare->xLocation - 1 && s.yLocation == centerSquare->yLocation - 1) {// TOP LEFT
-				s.isOccupied = true;
-				s.type = currentType;
-				s.facing = "N";
-				rotated = "true";
-				if (s.xLocation == centerSquare->xLocation && s.yLocation == centerSquare->yLocation + 1) {
-					s.isCenter = true;
-				}
-			}
-		}
-	}
-	rotated = false;
-}
-
 void Board::CheckClearRow()
 {
 	std::vector<std::vector<Tile*>> rows;
@@ -791,12 +366,9 @@ void Board::ClearRow(std::vector<Tile*>& rowToClear, int index) {
 		s->type = "Blank";
 		s->facing = "NA";
 	}
-	//PrintB();
-	//SOMEWHERE IN THIS LOGIC LIES THE PROBLEM
+
 	UpdateVectors();
-	//std::cout <<"Size of placed vec" << placedSquares.size() << "\n";
 	MovePlacedDown(index);
-	//UP THERE
 }
 void Board::MovePlacedDown(int index) {
 	std::cout << "Moving down \n";
@@ -923,7 +495,6 @@ bool Board::CanMove(std::string dir) {
 void Board::Move(std::string dir) {
 	PauseUpdate();
 	//check if can move direction
-
 	if (dir == "Left" && CanMove("Left")) {
 		ClearSquares();
 		for (auto& s : squareObjects) {
@@ -934,31 +505,38 @@ void Board::Move(std::string dir) {
 					s.type = currentType;
 					s.facing = currentFacing;
 					if (os->isCenter) {
+
 						s.isCenter = true;
 						os->isCenter = false;
 					}
 				}
 
 			}
+			currentPiece->UpdateRadius(occupiedSquares);
+
 		}
 
 		//return;
 	}
 	else if (dir == "Right" && CanMove("Right")) {
+		bool movedCenter = false;
 		ClearSquares();
+
 		for (auto& s : squareObjects) {
 			for (auto& os : occupiedSquares) {
 				if (s.xLocation == os->xLocation + 1 && s.yLocation == os->yLocation) {
-					if (os->isCenter) {
-						s.isCenter = true;
-						os->isCenter = false;
-					}
 					s.isOccupied = true;
 					s.type = currentType;
 					s.facing = currentFacing;
+					if (os->isCenter && !movedCenter) {
+						s.isCenter = true;
+						os->isCenter = false;
+						movedCenter = true;
+					}
 				}
 			}
 		}
+		currentPiece->UpdateRadius(occupiedSquares);
 		//return;
 
 	}
@@ -967,8 +545,6 @@ void Board::Move(std::string dir) {
 		//return;
 
 	}
-	UpdateVectors();
-	currentPiece->UpdateRadius(occupiedSquares);
 	//currentPiece->Print();
 	ResumeUpdate();
 }
@@ -979,6 +555,7 @@ void Board::MoveDown() {
 	PauseUpdate();
 	placed = false;
 	ClearSquares();
+	bool movedCenter = false;
 	//use those cleared square's location data to activate the tile's directly beneath
 	for (auto& s : squareObjects) {
 		for (auto& os : occupiedSquares) {
@@ -986,19 +563,27 @@ void Board::MoveDown() {
 				s.isOccupied = true;
 				s.type = currentType;
 				s.facing = currentFacing;
-				if (os->isCenter) {
+				if (os->isCenter && !movedCenter) {
 					s.isCenter = true;
 					os->isCenter = false;
+					movedCenter = true;
 				}
-
 			}
 		}
 	}
 	if (currentPiece != nullptr) {
 		currentPiece->UpdateRadius(occupiedSquares);
 	}
+
+	//PrintRadius();
+	//PrintB();
 	ResumeUpdate();
-	PrintRadius();
+}
+void Board::PauseUpdate() {
+	pauseUpdate = true;
+}
+void Board::ResumeUpdate() {
+	pauseUpdate = false;
 }
 void Board::UpdateVectors() {
 	//Find all occupied squares
@@ -1015,13 +600,11 @@ void Board::UpdateVectors() {
 				auto it = std::find(occupiedSquares.begin(), occupiedSquares.end(), &s);
 				if (it == occupiedSquares.end())
 					occupiedSquares.push_back(&s);
-
 			}
 			else if (!s.isOccupied && !s.isPlaced) {
 				s.facing = "NA";
 			}
 		}
-
 	}
 }
 void Board::CollisionCheck() {
@@ -1058,16 +641,29 @@ void Board::PlacePiece() {
 		std::cout << allOccupiedSquares->isPlaced << "\n";
 	}
 }
+
+
+#ifdef db
 void Board::DrawBoard() {
 	for (auto& s : squareObjects) {
 
-		int centeredStartX = (winWidth / 2) + (s.xLocation * this->resolution) - ((WIDTH * 32) / 2);
-		int centeredStartY = (winHeight / 2) + (s.yLocation * this->resolution) - ((HEIGHT * 32) / 2);
+		int centeredStartX = (winWidth / 2) + (s.xLocation * this->resolution) - ((WIDTH * this->resolution) / 2);
+		int centeredStartY = (winHeight / 2) + (s.yLocation * this->resolution) - ((HEIGHT * this->resolution) / 2);
 		dest.x = centeredStartX;
 		dest.y = centeredStartY;
+		dest.w = this->resolution;
+		dest.h = this->resolution;
+
 		if (!s.isOccupied && !s.isPlaced || s.type == "Blank") {
-			TextureManager::Draw(BlankSquare, src, dest);
+			if (!s.isRadius) {
+				TextureManager::Draw(BlankSquare,src,dest);
+			}
+			else {
+				TextureManager::Draw(RadiusSquare, src, dest);
+			}
+
 		}
+
 		else {
 			if (s.type == "Square") {
 				TextureManager::Draw(BlueSquare, src, dest);
@@ -1093,6 +689,49 @@ void Board::DrawBoard() {
 		}
 	}
 }
+#else
+void Board::DrawBoard() {
+	for (auto& s : squareObjects) {
+
+		int centeredStartX = (winWidth / 2) + (s.xLocation * this->resolution) - ((WIDTH * this->resolution) / 2);
+		int centeredStartY = (winHeight / 2) + (s.yLocation * this->resolution) - ((HEIGHT * this->resolution) / 2);
+		dest.x = centeredStartX;
+		dest.y = centeredStartY;
+		dest.w = this->resolution;
+		dest.h = this->resolution;
+
+		if (!s.isOccupied && !s.isPlaced || s.type == "Blank") {
+			
+				TextureManager::Draw(BlankSquare, src, dest);
+		}
+
+		else {
+			if (s.type == "Square") {
+				TextureManager::Draw(YellowSquare, src, dest);
+			}
+			if (s.type == "Long") {
+				TextureManager::Draw(LightBlueSquare, src, dest);
+			}
+			if (s.type == "R") {
+				TextureManager::Draw(BlueSquare, src, dest);
+			}
+			if (s.type == "L") {
+				TextureManager::Draw(OrangeSquare, src, dest);
+			}
+			if (s.type == "T") {
+				TextureManager::Draw(PurpleSquare, src, dest);
+			}
+			if (s.type == "S") {
+				TextureManager::Draw(GreenSquare, src, dest);
+			}
+			if (s.type == "Z") {
+				TextureManager::Draw(RedSquare, src, dest);
+			}
+		}
+	}
+}
+
+#endif
 
 void Board::Print() {
 	int counter = 0;
@@ -1114,7 +753,7 @@ void Board::PrintB() {
 		else if (i->isOccupied && !i->isCenter)
 			std::cout << "| " << i->facing << " |";
 		else
-			std::cout << "| " << "O" << " |";
+			std::cout << "| " << counter << " |";
 		if (counter >= WIDTH) {
 			std::cout << std::endl;
 			counter = 0;
@@ -1137,10 +776,10 @@ void Board::PrintRadius() {
 		if (it != currRad.end()) {
 			std::cout << "| * |";
 		}
-		
-			
+
+
 		else
-			std::cout << "| " << " " << " |";
+			std::cout << "| " << counter << " |";
 		if (counter >= WIDTH) {
 			std::cout << std::endl;
 			counter = 0;

@@ -8,7 +8,7 @@
 class Board {
 public:
 	bool rotated;
-	int resolution;
+	int& resolution;
 	int rowToClearIndex = 0;
 	SDL_Rect src, dest;
 	std::vector<Tile> squareObjects;
@@ -24,6 +24,11 @@ public:
 	SDL_Texture* BlueSquare;
 	SDL_Texture* YellowSquare;
 	SDL_Texture* RedSquare;
+	SDL_Texture* GreenSquare;
+	SDL_Texture* PurpleSquare;
+	SDL_Texture* LightBlueSquare;
+	SDL_Texture* OrangeSquare;
+	SDL_Texture* RadiusSquare;
 	Piece* currentPiece;
 	bool placed = false;
 	bool pauseUpdate = false;
@@ -33,11 +38,6 @@ public:
 	void ClearPlaced(int index);
 	void ResumeUpdate();
 	void RotateLogicFor_Long_Shape(std::string _facing, int pieceHeight, int pieceWidth, int middleXAxis, int middleYAxis);
-	void RotateLogicFor_R_Shape();
-	void RotateLogicFor_L_Shape();
-	void RotateLogicFor_T_Shape();
-	void RotateLogicFor_S_Shape();
-	void RotateLogicFor_Z_Shape();
 	void CheckClearRow();
 	void ClearRow(std::vector<Tile*>& rowToClear, int index);
 	void MovePlacedDown(int index);
@@ -48,19 +48,24 @@ public:
 	void UpdateVectors();
 	void CollisionCheck();
 	void PlacePiece();
+	void HandleTextureResize();
 	void DrawBoard();
 	void Print();
 	void PrintB();
 	void PrintRadius();
-	bool CanRotate(std::string type, std::string facing);
-	Board(int res, SDL_Window* win)
+	Board(int& res, SDL_Window* win)
 		:rotated{ false }, resolution{ res },
-		BlankSquare{ TextureManager::LoadTexture("res/img/BlankSquare.png") },
-		BlueSquare{ TextureManager::LoadTexture("res/img/BlueSquare.png") },
-		YellowSquare{ TextureManager::LoadTexture("res/img/YellowSquare.png") },
-		RedSquare{ TextureManager::LoadTexture("res/img/RedSquare.png") },
+		BlankSquare{ TextureManager::LoadTexture("res/img/BlankSquare.png",this->resolution,this->resolution) },
+		BlueSquare{ TextureManager::LoadTexture("res/img/BlueSquare.png",this->resolution,this->resolution) },
+		YellowSquare{ TextureManager::LoadTexture("res/img/YellowSquare.png",this->resolution,this->resolution) },
+		RedSquare{ TextureManager::LoadTexture("res/img/RedSquare.png",this->resolution,this->resolution) },
+		GreenSquare{ TextureManager::LoadTexture("res/img/GreenSquare.png",this->resolution,this->resolution) },
+		PurpleSquare{ TextureManager::LoadTexture("res/img/PurpleSquare.png",this->resolution,this->resolution) },
+		LightBlueSquare{ TextureManager::LoadTexture("res/img/LightBlueSquare.png",this->resolution,this->resolution) },
+		OrangeSquare{ TextureManager::LoadTexture("res/img/OrangeSquare.png",this->resolution,this->resolution) },
+		RadiusSquare{ TextureManager::LoadTexture("res/img/BlankSquareDB.png",this->resolution,this->resolution) },
 		pauseUpdate{ false }, src{ SDL_Rect{0,0,res,res} },
-		dest{ SDL_Rect { 0,0,resolution,resolution } }, dropPiece{ true },
+		dest{ SDL_Rect { 0,0,res,res } }, dropPiece{ true },
 		currentPiece{nullptr}
 
 

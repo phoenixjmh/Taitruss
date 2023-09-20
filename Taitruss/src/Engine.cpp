@@ -2,14 +2,15 @@
 //#define db
 //#define test3
 
-void Engine::BeginSession(int resolution, SDL_Window* window) {
-	board = new Board(resolution, window);
+void Engine::BeginSession(int& resolution, SDL_Window* window) {
+	board = new Board(m_blockResolution, window);
 }
 
 void Engine::Update() {
 	DropLogic();
 	board->UpdateVectors();
 	board->CollisionCheck();
+	//board->currentPiece->UpdateRadius(board->occupiedSquares);
 }
 
 void Engine::Render(SDL_Renderer* renderer) {
@@ -17,7 +18,7 @@ void Engine::Render(SDL_Renderer* renderer) {
 	board->DrawBoard();
 	SDL_RenderPresent(renderer);
 }
-int times = -1;
+int times = 1;
 void Engine::DropLogic() {
 	//Use this later to scramble the bag.
 	//board->AddPiece("Long");
