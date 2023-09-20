@@ -11,44 +11,24 @@ bool Piece::CanRotate(std::string type, std::string facing, std::vector<Tile*> o
 }
 bool Piece::BorderCheck(std::string type, std::string facing, std::vector<Tile*> occupiedSquares, int WIDTH, int HEIGHT) {
 	if (type == "Long") {
-		if (facing == "N") {
-			for (auto& os : occupiedSquares)
-			{
-				if (os->yLocation < 1) { //border check
-					return false;
-				}
-				if (os->yLocation >= HEIGHT - 2) { //border check
-					return false;
-				}
-			}
+		//update to radius system.
+		if (this->GetRadius().size() < 16)
+		{
+			return false;
 		}
-		if (facing == "E") {
-			for (auto& os : occupiedSquares)
-			{
-				if (os->xLocation > WIDTH - 2 || os->xLocation < 2) //border check
-					return false;
-
-			}
-		}
-		if (facing == "S") {
-			for (auto& os : occupiedSquares)
-			{
-				if (os->yLocation < 1) { //border check
-					return false;
-				}
-				if (os->yLocation >= HEIGHT - 2) { //border check
-					return false;
-				}
-			}
-		}
-		if (facing == "W") {
-			for (auto& os : occupiedSquares) {
-				if (os->xLocation > WIDTH - 3 || os->xLocation < 1) //border check
-					return false;
-			}
-		}
-		return true;
 	}
+
+	else {
+		std::cout << "OTHER TYPE";
+		if (this->GetRadius().size() < 9) {
+			return false;
+		}
+	}
+	return true;
+
+
+	//Check if radius has shrunk in size, if so, cannot rotate
+
 }
 bool Piece::NeighborCheck(std::string type, std::string facing, std::vector<Tile*> occupiedSquares, std::vector<Tile>& allSquares) {
 	UpdateRadius(occupiedSquares);
@@ -136,7 +116,7 @@ void Piece::Rotate()
 	Tile tile3Copy = *tile3;
 	Tile tile4Copy = *tile4;
 	Tile tile5Copy = *tile5;
-	Tile tile6Copy = *tile6; 
+	Tile tile6Copy = *tile6;
 	Tile tile7Copy = *tile7;
 	Tile tile8Copy = *tile8;
 
