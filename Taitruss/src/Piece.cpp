@@ -11,7 +11,7 @@ bool Piece::CanRotate(std::string type, std::string facing, std::vector<Tile*> o
 }
 bool Piece::BorderCheck(std::string type, std::string facing, std::vector<Tile*> occupiedSquares, int WIDTH, int HEIGHT) {
 	if (type == "Long") {
-		//update to radius system.
+		
 		if (this->GetRadius().size() < 16)
 		{
 			return false;
@@ -19,7 +19,6 @@ bool Piece::BorderCheck(std::string type, std::string facing, std::vector<Tile*>
 	}
 
 	else {
-		std::cout << "OTHER TYPE";
 		if (this->GetRadius().size() < 9) {
 			return false;
 		}
@@ -62,9 +61,7 @@ void Piece::RefreshPiece() {
 
 void Piece::Rotate()
 {
-	//copy every square with corresponding name
-	//rotate the whole piece
-	//full reassignment version
+	
 	Tile* tile0 = new Tile;
 	Tile* tile1 = new Tile;
 	Tile* tile2 = new Tile;
@@ -75,6 +72,7 @@ void Piece::Rotate()
 	Tile* tile7 = new Tile;
 	Tile* tile8 = new Tile;
 	//assign tiles to index[0-9] using relativePos, assigned in updateRadius
+
 	for (auto& tile : m_radius)
 	{
 		switch (tile->relativePos) {

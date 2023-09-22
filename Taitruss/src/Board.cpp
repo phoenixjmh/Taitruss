@@ -231,14 +231,8 @@ void Board::RotatePiece() {
 			currentPiece->RefreshPiece();
 			ResumeUpdate();
 		}
-
-
-
 	}
 	else std::cout << "CANNOT ROTATE\n";
-
-
-
 }
 
 void Board::RotateLogicFor_Long_Shape(std::string _facing, int pieceHeight, int pieceWidth, int middleXAxis, int middleYAxis) {
@@ -308,18 +302,18 @@ void Board::RotateLogicFor_Long_Shape(std::string _facing, int pieceHeight, int 
 	//PrintB();
 	rotated = false;
 }
-
+/// <summary>
+/// Assign tiles to row, then loop through and check if all in row are placed.
+///	If full row is placed, clear it, passing in the yposition, for dropping the 
+///	pieces above it, and the amount of rows to clear to the MovePlacedDown function
+/// </summary>
 void Board::CheckClearRow()
 {
+	
 	std::vector<std::vector<Tile*>> rows;
-	//Check each row
 	for (int r = 0; r < HEIGHT; r++)
 	{
 		std::vector<Tile*> row;
-		//if yposition==HEIGHT
-		// count amount of xPositions that are filled in that height
-		//if count>WIDTH
-		//CLEAR ROW
 		for (int c = 0; c < WIDTH; c++)
 		{
 			int index = r * WIDTH + c;
@@ -330,11 +324,9 @@ void Board::CheckClearRow()
 		rows.push_back(row);
 	}
 
-	//std::cout << rows.size() * rows[0].size() << "   " << squareObjects.size() << std::endl;
 	int clearIndex = 0;
 	std::vector<std::vector<Tile*>> rowsToClear;
 	for (auto& row : rows) {
-		++clearIndex;
 		int occupiedInRow = 0;
 		for (auto& column : row) {
 			if (column->isPlaced) {
@@ -344,19 +336,21 @@ void Board::CheckClearRow()
 				auto it = std::find(rowsToClear.begin(), rowsToClear.end(), row);
 				if (it == rowsToClear.end()) {
 					rowsToClear.push_back(row);
+					clearIndex = column->yLocation;
 				}
-				//ClearRow(row, clearIndex);
 				std::cout << "OCCUPIED IN ROW " << occupiedInRow << "\n";
 			}
 		}
 	}
+	std::cout << "INDEX TO DELETE TO" << clearIndex<<"\n";
 	//clear all rowsToClear
 	for (auto& r : rowsToClear)
 	{
 		ClearRow(r, clearIndex - 1);
 	}
+	int timesToMove = rowsToClear.size();
 
-
+	MovePlacedDown(clearIndex,timesToMove);
 }
 
 void Board::ClearRow(std::vector<Tile*>& rowToClear, int index) {
@@ -365,36 +359,33 @@ void Board::ClearRow(std::vector<Tile*>& rowToClear, int index) {
 		s->isPlaced = false;
 		s->type = "Blank";
 		s->facing = "NA";
+
 	}
 
 	UpdateVectors();
-	MovePlacedDown(index);
-}
-void Board::MovePlacedDown(int index) {
-	std::cout << "Moving down \n";
-	PauseUpdate();
-	//clear all squares above the cleared row.
-	ClearPlaced(index);
-	/*ResumeUpdate();
-	return;*/
+	
 
-	//use those cleared square's location data to activate the tile's directly beneath
-	for (auto& s : squareObjects) {
-		for (auto& ps : placedSquares) {
-			/*if (ps->yLocation >= index) {
-				ps->isPlaced = true;
-			}*/
-			if (s.xLocation == ps->xLocation && s.yLocation == ps->yLocation + 1
-				&& ps->yLocation <= index) {
-				s.isPlaced = true;
-				s.type = ps->type;
-				s.facing = currentFacing;
+}
+void Board::MovePlacedDown(int index ,int timesToMove) {
+	//Get highest cleared Y from index
+	while (timesToMove > 0) {
+		std::cout << "Moving down \n";
+		PauseUpdate();
+		ClearPlaced(index);
+		for (auto& s : squareObjects) {
+			for (auto& ps : placedSquares) {
+				if (s.xLocation == ps->xLocation && s.yLocation == ps->yLocation + 1
+					&& ps->yLocation <= index) {
+					s.isPlaced = true;
+					s.type = ps->type;
+					s.facing = currentFacing;
+				}
 			}
 		}
+		ResumeUpdate();
+		UpdateVectors();
+		timesToMove--;
 	}
-	ResumeUpdate();
-
-
 }
 
 void Board::ClearSquares() {
@@ -414,6 +405,7 @@ void Board::ClearPlaced(int index) {
 		}
 	}
 	std::cout << cnt << " <-- amount of placed to clear\n";
+	ResumeUpdate();
 }
 
 bool Board::CanMove(std::string dir) {
@@ -510,10 +502,8 @@ void Board::Move(std::string dir) {
 						os->isCenter = false;
 					}
 				}
-
 			}
 			currentPiece->UpdateRadius(occupiedSquares);
-
 		}
 
 		//return;
@@ -603,6 +593,7 @@ void Board::UpdateVectors() {
 			}
 			else if (!s.isOccupied && !s.isPlaced) {
 				s.facing = "NA";
+				s.type = "Blank";
 			}
 		}
 	}
@@ -656,7 +647,7 @@ void Board::DrawBoard() {
 
 		if (!s.isOccupied && !s.isPlaced || s.type == "Blank") {
 			if (!s.isRadius) {
-				TextureManager::Draw(BlankSquare,src,dest);
+				TextureManager::Draw(BlankSquare, src, dest);
 			}
 			else {
 				TextureManager::Draw(RadiusSquare, src, dest);
@@ -701,8 +692,8 @@ void Board::DrawBoard() {
 		dest.h = this->resolution;
 
 		if (!s.isOccupied && !s.isPlaced || s.type == "Blank") {
-			
-				TextureManager::Draw(BlankSquare, src, dest);
+
+			TextureManager::Draw(BlankSquare, src, dest);
 		}
 
 		else {

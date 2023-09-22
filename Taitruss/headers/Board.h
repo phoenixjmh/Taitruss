@@ -40,7 +40,7 @@ public:
 	void RotateLogicFor_Long_Shape(std::string _facing, int pieceHeight, int pieceWidth, int middleXAxis, int middleYAxis);
 	void CheckClearRow();
 	void ClearRow(std::vector<Tile*>& rowToClear, int index);
-	void MovePlacedDown(int index);
+	void MovePlacedDown(int index,int timesToMove);
 	void ClearSquares();
 	bool CanMove(std::string dir);
 	void Move(std::string dir);
