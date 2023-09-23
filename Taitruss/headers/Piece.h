@@ -12,7 +12,8 @@ public:
 	void UpdateRadius(std::vector<Tile*> occupiedSquares);
 	std::vector<Tile*> GetRadius();
 	void RefreshPiece();
-	void Rotate();
+	void Rotate() const;
+	void RotateLong(std::vector<Tile*>occupiedSquares,std::vector<Tile> &squareObjects);
 
 
 
@@ -20,13 +21,15 @@ public:
 		m_type{ type },
 		m_facing{ facing },
 		m_allSquares{ allSquares },
-		os{occupiedSquares}
+		os{occupiedSquares},
+		m_rotated{false}
 		
 
 
 
 	{};
 private:
+	bool m_rotated;
 	std::vector<Tile>& m_allSquares;
 	std::vector<Tile*> m_radius;
 	bool BorderCheck(std::string type, std::string facing, std::vector<Tile*> occupiedSquares, int WIDTH, int HEIGHT);

@@ -4,13 +4,13 @@
 
 class EventManager {
 public:
-	Engine* _engine;
-	Interface* _interface;
+	Engine* engine;
+	Interface* interface;
 	static SDL_Event event;
-	void ResizeGraphics();
-	void HandleEvents();
+	void ResizeGraphics() const;
+	void HandleEvents() const;
 	EventManager(Engine* engine,Interface* interface):
-		_engine{engine},
-		_interface{interface}
+		engine{engine},
+		interface{interface}
 	{}
 };

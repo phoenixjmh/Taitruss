@@ -4,12 +4,11 @@
 
 void Board::AddPiece(std::string type) {
 	dropPiece = false;
-	Tile* center = new Tile;
 	if (type == "Square") {
-		currentType = type;
+		m_currentType = type;
 
 		std::cout << "Added " << type << " to board" << std::endl;
-		for (auto& s : squareObjects) {
+		for (auto& s : m_squareObjects) {
 			if (s.yLocation == 0 || s.yLocation == 1) {
 				if (s.xLocation == (WIDTH / 2) - 1 ||
 					s.xLocation == (WIDTH / 2)) {
@@ -22,9 +21,9 @@ void Board::AddPiece(std::string type) {
 
 	}
 	if (type == "Long") {
-		currentType = type;
+		m_currentType = type;
 		std::cout << "Added " << type << " to board" << std::endl;
-		for (auto& s : squareObjects) {
+		for (auto& s : m_squareObjects) {
 			if (s.yLocation == 0) {
 				if (s.xLocation == (WIDTH / 2) - 2 ||
 					s.xLocation == (WIDTH / 2) - 1 ||
@@ -40,9 +39,9 @@ void Board::AddPiece(std::string type) {
 
 
 	if (type == "R") {
-		currentType = type;
+		m_currentType = type;
 		std::cout << "Added " << type << " to board" << std::endl;
-		for (auto& s : squareObjects) {
+		for (auto& s : m_squareObjects) {
 			if (s.yLocation == 0) {
 				if (s.xLocation == (WIDTH / 2) - 1) { //top left
 					s.type = type;
@@ -54,7 +53,6 @@ void Board::AddPiece(std::string type) {
 			if (s.yLocation == 1) {
 				if (s.xLocation == (WIDTH / 2)) {
 					s.isCenter = true;
-					center = &s;
 				}
 			}
 			if (s.yLocation == 1) {
@@ -69,9 +67,9 @@ void Board::AddPiece(std::string type) {
 		}
 	}
 	if (type == "L") {
-		currentType = type;
+		m_currentType = type;
 		std::cout << "Added " << type << " to board" << std::endl;
-		for (auto& s : squareObjects) {
+		for (auto& s : m_squareObjects) {
 			if (s.yLocation == 0) {
 				if (s.xLocation == (WIDTH / 2) + 1) { //top right
 					s.type = type;
@@ -83,7 +81,6 @@ void Board::AddPiece(std::string type) {
 			if (s.yLocation == 1) {
 				if (s.xLocation == (WIDTH / 2)) {
 					s.isCenter = true;
-					center = &s;
 				}
 			}
 			if (s.yLocation == 1) {
@@ -98,9 +95,9 @@ void Board::AddPiece(std::string type) {
 		}
 	}
 	if (type == "S") {
-		currentType = type;
+		m_currentType = type;
 		std::cout << "Added " << type << " to board" << std::endl;
-		for (auto& s : squareObjects) {
+		for (auto& s : m_squareObjects) {
 			if (s.yLocation == 0) {
 				if (s.xLocation == (WIDTH / 2) ||  //top center
 					s.xLocation == (WIDTH / 2) + 1) {  //top right
@@ -113,7 +110,6 @@ void Board::AddPiece(std::string type) {
 			if (s.yLocation == 1) {
 				if (s.xLocation == (WIDTH / 2)) {
 					s.isCenter = true;
-					center = &s;
 					s.type = type;
 					s.isOccupied = true;
 					s.facing = "N";
@@ -130,9 +126,9 @@ void Board::AddPiece(std::string type) {
 		}
 	}
 	if (type == "Z") {
-		currentType = type;
+		m_currentType = type;
 		std::cout << "Added " << type << " to board" << std::endl;
-		for (auto& s : squareObjects) {
+		for (auto& s : m_squareObjects) {
 			if (s.yLocation == 0) {
 				if (s.xLocation == (WIDTH / 2) ||  //top center
 					s.xLocation == (WIDTH / 2) - 1) {  //top left
@@ -144,7 +140,6 @@ void Board::AddPiece(std::string type) {
 			}
 			if (s.yLocation == 1) {
 				if (s.xLocation == (WIDTH / 2)) {
-					center = &s;
 					s.isCenter = true;
 					s.type = type;
 					s.isOccupied = true;
@@ -163,9 +158,9 @@ void Board::AddPiece(std::string type) {
 	}
 
 	if (type == "T") {
-		currentType = type;
+		m_currentType = type;
 		std::cout << "Added " << type << " to board" << std::endl;
-		for (auto& s : squareObjects) {
+		for (auto& s : m_squareObjects) {
 			if (s.yLocation == 0) {
 				if (s.xLocation == (WIDTH / 2)) { //top center
 					s.type = type;
@@ -176,7 +171,6 @@ void Board::AddPiece(std::string type) {
 			}
 			if (s.yLocation == 1) {
 				if (s.xLocation == (WIDTH / 2)) {
-					center = &s;
 					s.isCenter = true;
 				}
 			}
@@ -193,8 +187,8 @@ void Board::AddPiece(std::string type) {
 	}
 
 	UpdateVectors();
-	if (type != "" && occupiedSquares.size() > 0 && squareObjects.size() > 0)
-		currentPiece = new Piece(type, "N", occupiedSquares, squareObjects, WIDTH, HEIGHT);
+	if (type != "" && m_occupiedSquares.size() > 0 && m_squareObjects.size() > 0)
+		m_currentPiece = new Piece(type, "N", m_occupiedSquares, m_squareObjects, WIDTH, HEIGHT);
 	else std::cout << "ERROR::Failed to create 'Piece' in Board::AddPiece function::ERROR\n";
 
 
@@ -205,103 +199,27 @@ void Board::AddPiece(std::string type) {
 void Board::RotatePiece() {
 	//Clockwise Turn
 
-	if (currentPiece->CanRotate(currentType, currentFacing, occupiedSquares, squareObjects, WIDTH, HEIGHT)) {
+	if (m_currentPiece->CanRotate(m_currentType, m_currentFacing, m_occupiedSquares, m_squareObjects, WIDTH, HEIGHT)) {
 
-		if (currentType == "Long") {
-			Tile* first = occupiedSquares.front();
-			Tile* last = occupiedSquares.back();
-
-			std::cout << "First y position" << first->yLocation << " Last y position" << last->yLocation << std::endl;
-			int pieceHeight = last->yLocation - first->yLocation + 1;
-			int middleYAxis = first->yLocation + (pieceHeight / 2);
-			int pieceWidth = last->xLocation - first->xLocation + 1;
-			int middleXAxis = first->xLocation + (pieceWidth / 2);
-
-			first = nullptr;
-			last = nullptr;
+		if (m_currentType == "Long") {
 			PauseUpdate();
-			RotateLogicFor_Long_Shape(currentFacing, pieceHeight, pieceWidth, middleXAxis, middleYAxis);
-			currentPiece->UpdateRadius(occupiedSquares);
-			currentPiece->RefreshPiece();
+			m_currentPiece->RotateLong(m_occupiedSquares, m_squareObjects);
 			ResumeUpdate();
 		}
-		else if (currentType != "Long") {
+		else if (m_currentType != "Long") {
 			PauseUpdate();
-			currentPiece->Rotate();
-			currentPiece->RefreshPiece();
+			m_currentPiece->Rotate();
+			m_currentPiece->RefreshPiece();
 			ResumeUpdate();
+
 		}
+
+
 	}
 	else std::cout << "CANNOT ROTATE\n";
 }
 
-void Board::RotateLogicFor_Long_Shape(std::string _facing, int pieceHeight, int pieceWidth, int middleXAxis, int middleYAxis) {
-	if (rotated)
-		return;
 
-	if (_facing == "N") {
-		for (auto& s : squareObjects) {
-			if (!s.isPlaced)
-				s.isOccupied = false;
-			if (s.xLocation == middleXAxis) {
-				if (s.yLocation >= middleYAxis + 1 - (pieceWidth / 2) && s.yLocation <= middleYAxis + (pieceWidth / 2)) {
-					s.isOccupied = true;
-					s.type = currentType;
-					s.facing = "E";
-					rotated = true;
-					std::cout << "Rotated\n";
-				}
-			}
-		}
-	}
-
-	else if (_facing == "E") {
-		for (auto& s : squareObjects) {
-			if (!s.isPlaced) {
-				s.isOccupied = false;
-
-				if (s.yLocation == middleYAxis) {
-					if (s.xLocation >= middleXAxis - (pieceHeight / 2) && s.xLocation <= middleXAxis - 1 + (pieceHeight / 2)) {
-						s.isOccupied = true;
-						s.type = currentType;
-						s.facing = "S";
-						rotated = true;
-					}
-				}
-			}
-		}
-	}
-	else if (_facing == "S") {
-		for (auto& s : squareObjects) {
-			s.isOccupied = false;
-
-			if (s.xLocation + 1 == middleXAxis) {
-				if (s.yLocation >= middleYAxis - (pieceWidth / 2) && s.yLocation <= middleYAxis - 1 + (pieceWidth / 2)) {
-					s.isOccupied = true;
-					s.type = currentType;
-					s.facing = "W";
-					rotated = true;
-				}
-			}
-		}
-	}
-	else if (_facing == "W") {
-		for (auto& s : squareObjects) {
-			s.isOccupied = false;
-			if (s.yLocation + 1 == middleYAxis) {
-				if (s.xLocation >= middleXAxis + 1 - (pieceHeight / 2) && s.xLocation <= middleXAxis + (pieceHeight / 2)) {
-					s.isOccupied = true;
-					s.type = currentType;
-					s.facing = "N";
-					rotated = true;
-				}
-			}
-		}
-	}
-
-	//PrintB();
-	rotated = false;
-}
 /// <summary>
 /// Assign tiles to row, then loop through and check if all in row are placed.
 ///	If full row is placed, clear it, passing in the yposition, for dropping the 
@@ -309,7 +227,7 @@ void Board::RotateLogicFor_Long_Shape(std::string _facing, int pieceHeight, int 
 /// </summary>
 void Board::CheckClearRow()
 {
-	
+
 	std::vector<std::vector<Tile*>> rows;
 	for (int r = 0; r < HEIGHT; r++)
 	{
@@ -317,18 +235,18 @@ void Board::CheckClearRow()
 		for (int c = 0; c < WIDTH; c++)
 		{
 			int index = r * WIDTH + c;
-			if (index < squareObjects.size()) {
-				row.push_back(&squareObjects[index]);
+			if (index < m_squareObjects.size()) {
+				row.push_back(&m_squareObjects[index]);
 			}
 		}
 		rows.push_back(row);
 	}
 
-	int clearIndex = 0;
+	int clear_index = 0;
 	std::vector<std::vector<Tile*>> rowsToClear;
 	for (auto& row : rows) {
 		int occupiedInRow = 0;
-		for (auto& column : row) {
+		for (const auto& column : row) {
 			if (column->isPlaced) {
 				occupiedInRow++;
 			}
@@ -336,26 +254,26 @@ void Board::CheckClearRow()
 				auto it = std::find(rowsToClear.begin(), rowsToClear.end(), row);
 				if (it == rowsToClear.end()) {
 					rowsToClear.push_back(row);
-					clearIndex = column->yLocation;
+					clear_index = column->yLocation;
 				}
 				std::cout << "OCCUPIED IN ROW " << occupiedInRow << "\n";
 			}
 		}
 	}
-	std::cout << "INDEX TO DELETE TO" << clearIndex<<"\n";
+	std::cout << "INDEX TO DELETE TO" << clear_index << "\n";
 	//clear all rowsToClear
 	for (auto& r : rowsToClear)
 	{
-		ClearRow(r, clearIndex - 1);
+		ClearRow(r, clear_index - 1);
 	}
-	int timesToMove = rowsToClear.size();
+	const int times_to_move = rowsToClear.size();
 
-	MovePlacedDown(clearIndex,timesToMove);
+	MovePlacedDown(clear_index, times_to_move);
 }
 
-void Board::ClearRow(std::vector<Tile*>& rowToClear, int index) {
+void Board::ClearRow(const std::vector<Tile*>& row_to_clear, int index) {
 	std::cout << "CLEARING ROW \n";
-	for (auto& s : rowToClear) {
+	for (auto& s : row_to_clear) {
 		s->isPlaced = false;
 		s->type = "Blank";
 		s->facing = "NA";
@@ -363,33 +281,34 @@ void Board::ClearRow(std::vector<Tile*>& rowToClear, int index) {
 	}
 
 	UpdateVectors();
-	
+
 
 }
-void Board::MovePlacedDown(int index ,int timesToMove) {
+void Board::MovePlacedDown(int index, int times_to_move) {
 	//Get highest cleared Y from index
-	while (timesToMove > 0) {
+	while (times_to_move > 0) {
 		std::cout << "Moving down \n";
 		PauseUpdate();
 		ClearPlaced(index);
-		for (auto& s : squareObjects) {
+		for (auto& s : m_squareObjects) {
 			for (auto& ps : placedSquares) {
 				if (s.xLocation == ps->xLocation && s.yLocation == ps->yLocation + 1
 					&& ps->yLocation <= index) {
 					s.isPlaced = true;
 					s.type = ps->type;
-					s.facing = currentFacing;
+					s.facing = m_currentFacing;
 				}
 			}
 		}
 		ResumeUpdate();
 		UpdateVectors();
-		timesToMove--;
+		times_to_move--;
 	}
 }
 
-void Board::ClearSquares() {
-	for (auto& os : occupiedSquares) {
+void Board::ClearSquares() const
+{
+	for (auto& os : m_occupiedSquares) {
 		if (os->isPlaced == false)
 			os->isOccupied = false;
 
@@ -398,7 +317,7 @@ void Board::ClearSquares() {
 void Board::ClearPlaced(int index) {
 	int cnt = 0;
 	std::cout << "Index:" << index << " Height:" << HEIGHT << "\n";
-	for (auto& os : placedSquares) {
+	for (const auto& os : placedSquares) {
 		cnt++;
 		if (os->isPlaced && os->yLocation < index) {
 			os->isPlaced = false;
@@ -408,20 +327,23 @@ void Board::ClearPlaced(int index) {
 	ResumeUpdate();
 }
 
-bool Board::CanMove(std::string dir) {
+bool Board::CanMove(std::string dir)
+{
+
 	if (dir == "Right") {
-		for (auto& s : occupiedSquares) {
+		for (auto& s : m_occupiedSquares) {
 			if (s->xLocation + 1 == WIDTH && !s->isPlaced) {
 				return false;
 			}
 		}
-		for (int i = 0; i < squareObjects.size(); i++) {
-			for (int y = 0; y < squareObjects.size(); y++)
+		for (const auto& i : m_squareObjects)
+		{
+			for (const auto& square_object : m_squareObjects)
 			{
-				if (squareObjects[i].isOccupied) {
-					if (squareObjects[i].yLocation == squareObjects[y].yLocation) {
-						if (squareObjects[i].xLocation + 1 == squareObjects[y].xLocation) {
-							if (squareObjects[y].isPlaced) {
+				if (i.isOccupied) {
+					if (i.yLocation == square_object.yLocation) {
+						if (i.xLocation + 1 == square_object.xLocation) {
+							if (square_object.isPlaced) {
 								return false;
 							}
 						}
@@ -433,18 +355,19 @@ bool Board::CanMove(std::string dir) {
 
 	}
 	else if (dir == "Left") {
-		for (auto& s : occupiedSquares) {
+		for (auto& s : m_occupiedSquares) {
 			if (s->xLocation - 1 == -1 && !s->isPlaced) {
 				return false;
 			}
 		}
-		for (int i = 0; i < squareObjects.size(); i++) {
-			for (int y = 0; y < squareObjects.size(); y++)
+		for (const auto& i : m_squareObjects)
+		{
+			for (const auto& square_object : m_squareObjects)
 			{
-				if (squareObjects[i].isOccupied) {
-					if (squareObjects[i].yLocation == squareObjects[y].yLocation) {
-						if (squareObjects[i].xLocation - 1 == squareObjects[y].xLocation) {
-							if (squareObjects[y].isPlaced) {
+				if (i.isOccupied) {
+					if (i.yLocation == square_object.yLocation) {
+						if (i.xLocation - 1 == square_object.xLocation) {
+							if (square_object.isPlaced) {
 								return false;
 							}
 						}
@@ -457,18 +380,19 @@ bool Board::CanMove(std::string dir) {
 
 	}
 	else if (dir == "Down") {
-		for (auto& s : occupiedSquares) {
+		for (auto& s : m_occupiedSquares) {
 			if (s->yLocation + 1 == HEIGHT) {
 				return false;
 			}
 		}
-		for (int i = 0; i < squareObjects.size(); i++) {
-			for (int y = 0; y < squareObjects.size(); y++)
+		for (const auto& square_object : m_squareObjects)
+		{
+			for (const auto& neighbor_square : m_squareObjects)
 			{
-				if (squareObjects[i].isOccupied) {
-					if (squareObjects[i].xLocation == squareObjects[y].xLocation) {
-						if (squareObjects[i].yLocation + 1 == squareObjects[y].yLocation) {
-							if (squareObjects[y].isPlaced) {
+				if (neighbor_square.isOccupied) {
+					if (neighbor_square.xLocation == neighbor_square.xLocation) {
+						if (neighbor_square.yLocation + 1 == neighbor_square.yLocation) {
+							if (neighbor_square.isPlaced) {
 								return false;
 							}
 						}
@@ -489,13 +413,13 @@ void Board::Move(std::string dir) {
 	//check if can move direction
 	if (dir == "Left" && CanMove("Left")) {
 		ClearSquares();
-		for (auto& s : squareObjects) {
-			for (auto& os : occupiedSquares) {
+		for (auto& s : m_squareObjects) {
+			for (auto& os : m_occupiedSquares) {
 				if (s.xLocation == os->xLocation - 1 && s.yLocation == os->yLocation) {
 
 					s.isOccupied = true;
-					s.type = currentType;
-					s.facing = currentFacing;
+					s.type = m_currentType;
+					s.facing = m_currentFacing;
 					if (os->isCenter) {
 
 						s.isCenter = true;
@@ -503,30 +427,30 @@ void Board::Move(std::string dir) {
 					}
 				}
 			}
-			currentPiece->UpdateRadius(occupiedSquares);
+			m_currentPiece->UpdateRadius(m_occupiedSquares);
 		}
 
 		//return;
 	}
 	else if (dir == "Right" && CanMove("Right")) {
-		bool movedCenter = false;
+		bool moved_center = false;
 		ClearSquares();
 
-		for (auto& s : squareObjects) {
-			for (auto& os : occupiedSquares) {
+		for (auto& s : m_squareObjects) {
+			for (const auto& os : m_occupiedSquares) {
 				if (s.xLocation == os->xLocation + 1 && s.yLocation == os->yLocation) {
 					s.isOccupied = true;
-					s.type = currentType;
-					s.facing = currentFacing;
-					if (os->isCenter && !movedCenter) {
+					s.type = m_currentType;
+					s.facing = m_currentFacing;
+					if (os->isCenter && !moved_center) {
 						s.isCenter = true;
 						os->isCenter = false;
-						movedCenter = true;
+						moved_center = true;
 					}
 				}
 			}
 		}
-		currentPiece->UpdateRadius(occupiedSquares);
+		m_currentPiece->UpdateRadius(m_occupiedSquares);
 		//return;
 
 	}
@@ -542,54 +466,60 @@ void Board::MoveDown() {
 	//push all occupied squares down one piece  
 	//for every square, if it's location is directly below an occupied square,
 	//we  call it as occupied
-	PauseUpdate();
-	placed = false;
-	ClearSquares();
-	bool movedCenter = false;
-	//use those cleared square's location data to activate the tile's directly beneath
-	for (auto& s : squareObjects) {
-		for (auto& os : occupiedSquares) {
-			if (s.xLocation == os->xLocation && s.yLocation == os->yLocation + 1) {
-				s.isOccupied = true;
-				s.type = currentType;
-				s.facing = currentFacing;
-				if (os->isCenter && !movedCenter) {
-					s.isCenter = true;
-					os->isCenter = false;
-					movedCenter = true;
+	if (placeOnNextTick)
+		std::cout << "WILL MOVE DOWN " << placeOnNextTick << "\n";
+	if (placeOnNextTick == false)
+	{
+
+		PauseUpdate();
+		m_placed = false;
+		ClearSquares();
+		bool moved_center = false;
+		//use those cleared square's location data to activate the tile's directly beneath
+		for (auto& s : m_squareObjects) {
+			for (const auto& os : m_occupiedSquares) {
+				if (s.xLocation == os->xLocation && s.yLocation == os->yLocation + 1) {
+					s.isOccupied = true;
+					s.type = m_currentType;
+					s.facing = m_currentFacing;
+					if (os->isCenter && !moved_center) {
+						s.isCenter = true;
+						os->isCenter = false;
+						moved_center = true;
+					}
 				}
 			}
 		}
-	}
-	if (currentPiece != nullptr) {
-		currentPiece->UpdateRadius(occupiedSquares);
-	}
+		if (m_currentPiece != nullptr) {
+			m_currentPiece->UpdateRadius(m_occupiedSquares);
+		}
 
-	//PrintRadius();
-	//PrintB();
-	ResumeUpdate();
+		//PrintRadius();
+		//PrintB();
+		ResumeUpdate();
+	}
 }
 void Board::PauseUpdate() {
-	pauseUpdate = true;
+	m_pauseUpdate = true;
 }
 void Board::ResumeUpdate() {
-	pauseUpdate = false;
+	m_pauseUpdate = false;
 }
 void Board::UpdateVectors() {
 	//Find all occupied squares
-	if (!pauseUpdate) {
-		occupiedSquares.clear();
+	if (!m_pauseUpdate) {
+		m_occupiedSquares.clear();
 		placedSquares.clear();
-		for (auto& s : squareObjects) {
+		for (auto& s : m_squareObjects) {
 			if (s.isPlaced) {
 				placedSquares.push_back(&s);
 			}
 			if (s.isOccupied && !s.isPlaced) {
-				currentType = s.type;
-				currentFacing = s.facing;
-				auto it = std::find(occupiedSquares.begin(), occupiedSquares.end(), &s);
-				if (it == occupiedSquares.end())
-					occupiedSquares.push_back(&s);
+				m_currentType = s.type;
+				m_currentFacing = s.facing;
+				auto it = std::find(m_occupiedSquares.begin(), m_occupiedSquares.end(), &s);
+				if (it == m_occupiedSquares.end())
+					m_occupiedSquares.push_back(&s);
 			}
 			else if (!s.isOccupied && !s.isPlaced) {
 				s.facing = "NA";
@@ -598,39 +528,80 @@ void Board::UpdateVectors() {
 		}
 	}
 }
-void Board::CollisionCheck() {
-	for (auto i = 0; i < squareObjects.size(); i++) {
+
+bool Board::CanMoveDown()
+{
+	std::cout << "CHECKING UNDER\n";
+	for (auto i = 0; i < m_squareObjects.size(); i++) {
 		if (i > WIDTH * 2) {
-			if (squareObjects[i].yLocation == HEIGHT - 1 && squareObjects[i].isOccupied && squareObjects[i].isPlaced == false) {
-				if (!placed)
-					PlacePiece();
+			if (m_squareObjects[i].yLocation == HEIGHT - 1 && m_squareObjects[i].isOccupied && m_squareObjects[i].isPlaced == false) {
+				if (!m_placed)
+					return false;
+
 			}
+
 			//if this block is placed
-			if (squareObjects[i].isPlaced && squareObjects[i - WIDTH].isPlaced == false) {
+			if (m_squareObjects[i].isPlaced && m_squareObjects[i - WIDTH].isPlaced == false) {
 				//check if block above is occupied and not placed
-				if (squareObjects[i - WIDTH].isOccupied) {
-					std::cout << "Collision\n";
-					PlacePiece();
+				if (m_squareObjects[i - WIDTH].isOccupied) {
+					//Wait for next tick, then place the piece.
+					return false;
+					//PlacePiece();
 				}
 			}
 		}
 	}
+	return true;
+}
+void Board::CollisionCheck() {
+	if (placeOnNextTick == false)
+	{
+		for (auto i = 0; i < m_squareObjects.size(); i++) {
+			if (i > WIDTH * 2) {
+				if (m_squareObjects[i].yLocation == HEIGHT - 1 && m_squareObjects[i].isOccupied && m_squareObjects[i].isPlaced == false) {
+					if (!m_placed)
+						placeOnNextTick = true;
+					/*PlacePiece();*/
+				}
+
+				//if this block is placed
+				if (m_squareObjects[i].isPlaced && m_squareObjects[i - WIDTH].isPlaced == false) {
+					//check if block above is occupied and not placed
+					if (m_squareObjects[i - WIDTH].isOccupied) {
+						std::cout << "Collision\n";
+						//Wait for next tick, then place the piece.
+						placeOnNextTick = true;
+						//PlacePiece();
+					}
+				}
+			}
+		}
+	}
+
 }
 void Board::PlacePiece() {
+	placeOnNextTick = false;
+	if (CanMoveDown())
+	{
+		MoveDown();
+		return;
+	}
 	std::cout << "Place\n";
-	placed = true;
+	m_placed = true;
 
-	for (auto& allOccupiedSquares : occupiedSquares) {
-		allOccupiedSquares->isPlaced = true;
-		allOccupiedSquares->isOccupied = false;
-		allOccupiedSquares->isCenter = false;
+	for (const auto& all_occupied_squares : m_occupiedSquares) {
+		all_occupied_squares->isPlaced = true;
+		all_occupied_squares->isOccupied = false;
+		all_occupied_squares->isCenter = false;
 		std::cout << "Placed\n";
 	}
 	CheckClearRow();
-	dropPiece = true;
-	for (auto& allOccupiedSquares : occupiedSquares) {
-		std::cout << allOccupiedSquares->isPlaced << "\n";
+	for (const auto& all_occupied_squares : m_occupiedSquares) {
+		std::cout << all_occupied_squares->isPlaced << "\n";
 	}
+	dropPiece = true;
+	placeOnNextTick = false;
+
 }
 
 
@@ -682,41 +653,40 @@ void Board::DrawBoard() {
 }
 #else
 void Board::DrawBoard() {
-	for (auto& s : squareObjects) {
-
-		int centeredStartX = (winWidth / 2) + (s.xLocation * this->resolution) - ((WIDTH * this->resolution) / 2);
-		int centeredStartY = (winHeight / 2) + (s.yLocation * this->resolution) - ((HEIGHT * this->resolution) / 2);
-		dest.x = centeredStartX;
-		dest.y = centeredStartY;
-		dest.w = this->resolution;
-		dest.h = this->resolution;
+	for (auto& s : m_squareObjects) {
+		const int centered_start_x = (winWidth / 2) + (s.xLocation * this->m_resolution) - ((WIDTH * this->m_resolution) / 2);
+		const int centered_start_y = (winHeight / 2) + (s.yLocation * this->m_resolution) - ((HEIGHT * this->m_resolution) / 2);
+		dest.x = centered_start_x;
+		dest.y = centered_start_y;
+		dest.w = this->m_resolution;
+		dest.h = this->m_resolution;
 
 		if (!s.isOccupied && !s.isPlaced || s.type == "Blank") {
 
-			TextureManager::Draw(BlankSquare, src, dest);
+			TextureManager::Draw(m_blankSquare, src, dest);
 		}
 
 		else {
 			if (s.type == "Square") {
-				TextureManager::Draw(YellowSquare, src, dest);
+				TextureManager::Draw(m_yellowSquare, src, dest);
 			}
 			if (s.type == "Long") {
-				TextureManager::Draw(LightBlueSquare, src, dest);
+				TextureManager::Draw(m_lightBlueSquare, src, dest);
 			}
 			if (s.type == "R") {
-				TextureManager::Draw(BlueSquare, src, dest);
+				TextureManager::Draw(m_blueSquare, src, dest);
 			}
 			if (s.type == "L") {
-				TextureManager::Draw(OrangeSquare, src, dest);
+				TextureManager::Draw(m_orangeSquare, src, dest);
 			}
 			if (s.type == "T") {
-				TextureManager::Draw(PurpleSquare, src, dest);
+				TextureManager::Draw(m_purpleSquare, src, dest);
 			}
 			if (s.type == "S") {
-				TextureManager::Draw(GreenSquare, src, dest);
+				TextureManager::Draw(m_greenSquare, src, dest);
 			}
 			if (s.type == "Z") {
-				TextureManager::Draw(RedSquare, src, dest);
+				TextureManager::Draw(m_redSquare, src, dest);
 			}
 		}
 	}
@@ -724,17 +694,18 @@ void Board::DrawBoard() {
 
 #endif
 
-void Board::Print() {
+void Board::Print() const
+{
 	int counter = 0;
-	for (auto& os : occupiedSquares) {
+	for (auto& os : m_occupiedSquares) {
 		std::cout << ++counter << "OS COUNTER\n";
 	}
 }
 
-void Board::PrintB() {
+void Board::print_b() {
 	int counter = 0;
 	std::cout << "----------------------------------" << std::endl;
-	for (auto i = this->squareObjects.begin(); i != this->squareObjects.end(); ++i) {
+	for (auto i = this->m_squareObjects.begin(); i != this->m_squareObjects.end(); ++i) {
 		counter++;
 		if (i->isCenter) {
 			std::cout << "| " << "C" << " |";
@@ -753,18 +724,20 @@ void Board::PrintB() {
 	std::cout << "----------------------------------" << std::endl;
 
 }
-void Board::PrintRadius() {
-	auto currRad = currentPiece->GetRadius();
-	std::cout << "currentPieceInfo " << currentPiece->m_type << "\n";
-	std::cout << "Radius size" << currRad.size();
+void Board::print_radius() const
+{
+	auto current_radius = m_currentPiece->GetRadius();
+	std::cout << "currentPieceInfo " << m_currentPiece->m_type << "\n";
+	std::cout << "Radius size" << current_radius.size();
 
 	int counter = 0;
 	std::cout << "----------------------------------" << std::endl;
-	for (int i = 0; i < squareObjects.size(); i++) {
+	for (const auto& square_object : m_squareObjects)
+	{
 		counter++;
-		auto it = std::find(currRad.begin(), currRad.end(), &squareObjects[i]);
+		auto it = std::find(current_radius.begin(), current_radius.end(), &square_object);
 
-		if (it != currRad.end()) {
+		if (it != current_radius.end()) {
 			std::cout << "| * |";
 		}
 

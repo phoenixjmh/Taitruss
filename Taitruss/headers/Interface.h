@@ -14,7 +14,7 @@ public:
 	SDL_Window* CreateWindow(int SCREEN_WIDTH, int SCREEN_HEIGHT, const char* name);
 	void GetResolutions(int& screen_width, int& screen_height, int& block_resolution);
 	
-	void Clean();
+	void Clean() const;
 	
 	Interface() :
 		isRunning{ false },

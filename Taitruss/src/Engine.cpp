@@ -1,23 +1,26 @@
 #include "../headers/Engine.h"
-#define test1
+//#define test1
 
 void Engine::BeginSession(int& resolution, SDL_Window* window) {
 	board = new Board(m_blockResolution, window);
 }
 
-void Engine::Update() {
-	DropLogic();
+void Engine::update() const
+{
+	drop_logic();
 	board->UpdateVectors();
 	board->CollisionCheck();
 }
 
-void Engine::Render(SDL_Renderer* renderer) {
+void Engine::render(SDL_Renderer* renderer) const
+{
 	SDL_RenderClear(renderer);
 	board->DrawBoard();
 	SDL_RenderPresent(renderer);
 }
 int times = -1;
-void Engine::DropLogic() {
+void Engine::drop_logic() const
+{
 	//Use this later to scramble the bag.
 	//board->AddPiece("Long");
 #ifdef test1
@@ -101,10 +104,27 @@ void Engine::DropLogic() {
 #endif
 
 
-}}
-void Engine::MoveBlockDown() {
+}
+void Engine::move_block_down() const
+{
 	if (!Freeze)
 		board->MoveDown();
+
+}
+
+void Engine::OnTick()
+{
+	if (board->placeOnNextTick) {
+		board->PlacePiece();
+		std::cout << "PLACED" << "\n";
+	}
+}
+
+void Engine::Tick()
+{
+	m_ticks++;
+	std::cout << "TICK: " << m_ticks;
+	OnTick();
 
 }
 

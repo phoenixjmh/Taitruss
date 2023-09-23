@@ -27,7 +27,8 @@ SDL_Window* Interface::CreateWindow(int SCREEN_WIDTH, int SCREEN_HEIGHT, const c
 
 
 
-void Interface::Clean() {
+void Interface::Clean() const
+{
 	SDL_DestroyRenderer(renderer);
 	SDL_DestroyWindow(window);
 	SDL_Quit();

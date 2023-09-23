@@ -6,8 +6,7 @@ bool Piece::CanRotate(std::string type, std::string facing, std::vector<Tile*> o
 
 	if (BorderCheck(type, facing, occupiedSquares, WIDTH, HEIGHT) && NeighborCheck(type, facing, occupiedSquares, allSquares))
 		return true;
-	else return false;
-
+	return false;
 }
 bool Piece::BorderCheck(std::string type, std::string facing, std::vector<Tile*> occupiedSquares, int WIDTH, int HEIGHT) {
 	if (type == "Long") {
@@ -59,7 +58,7 @@ void Piece::RefreshPiece() {
 	}
 }
 
-void Piece::Rotate()
+void Piece::Rotate() const
 {
 	
 	Tile* tile0 = new Tile;
@@ -133,6 +132,88 @@ void Piece::Rotate()
 
 	std::cout << "Copy completed brute reassignment\n" << "Tile 2: " << tile2->isOccupied << "\n";
 	std::cout << "CENTER FROM ROTATE SCRIPT" << tile4->xLocation << tile4->yLocation << "\n";
+}
+
+void Piece::RotateLong(std::vector<Tile*>occupiedSquares,std::vector<Tile> &squareObjects) {
+	Tile* first = occupiedSquares.front();
+	Tile* last = occupiedSquares.back();
+
+	std::cout << "First y position" << first->yLocation << " Last y position" << last->yLocation << std::endl;
+	int pieceHeight = last->yLocation - first->yLocation + 1;
+	int middleYAxis = first->yLocation + (pieceHeight / 2);
+	int pieceWidth = last->xLocation - first->xLocation + 1;
+	int middleXAxis = first->xLocation + (pieceWidth / 2);
+
+	first = nullptr;
+	last = nullptr;
+	
+	if (m_rotated)
+		return;
+
+	if (m_facing == "N") {
+		for (auto& s : squareObjects) {
+			if (!s.isPlaced)
+				s.isOccupied = false;
+			if (s.xLocation == middleXAxis) {
+				if (s.yLocation >= middleYAxis + 1 - (pieceWidth / 2) && s.yLocation <= middleYAxis + (pieceWidth / 2)) {
+					s.isOccupied = true;
+					s.type = m_type;
+					m_facing = "E";
+					m_rotated = true;
+					std::cout << "Rotated\n";
+				}
+			}
+		}
+	}
+
+	else if (m_facing == "E") {
+		for (auto& s : squareObjects) {
+			if (!s.isPlaced) {
+				s.isOccupied = false;
+
+				if (s.yLocation == middleYAxis) {
+					if (s.xLocation >= middleXAxis - (pieceHeight / 2) && s.xLocation <= middleXAxis - 1 + (pieceHeight / 2)) {
+						s.isOccupied = true;
+						s.type = m_type;
+						m_facing = "S";
+						m_rotated = true;
+					}
+				}
+			}
+		}
+	}
+	else if (m_facing == "S") {
+		for (auto& s : squareObjects) {
+			s.isOccupied = false;
+
+			if (s.xLocation + 1 == middleXAxis) {
+				if (s.yLocation >= middleYAxis - (pieceWidth / 2) && s.yLocation <= middleYAxis - 1 + (pieceWidth / 2)) {
+					s.isOccupied = true;
+					s.type = m_type;
+					m_facing = "W";
+					m_rotated = true;
+				}
+			}
+		}
+	}
+	else if (m_facing == "W") {
+		for (auto& s : squareObjects) {
+			s.isOccupied = false;
+			if (s.yLocation + 1 == middleYAxis) {
+				if (s.xLocation >= middleXAxis + 1 - (pieceHeight / 2) && s.xLocation <= middleXAxis + (pieceHeight / 2)) {
+					s.isOccupied = true;
+					s.type = m_type;
+					m_facing = "N";
+					m_rotated = true;
+				}
+			}
+		}
+	}
+
+	//PrintB();
+	m_rotated = false;
+
+	
 }
 
 void Piece::UpdateRadius(std::vector<Tile*> occupiedSquares)
