@@ -7,6 +7,7 @@ public:
 	Engine* _engine;
 	Interface* _interface;
 	static SDL_Event event;
+	void ResizeGraphics();
 	void HandleEvents();
 	EventManager(Engine* engine,Interface* interface):
 		_engine{engine},

@@ -1,0 +1,2 @@
+Block rotation when it will move into edge or other piece
+Scramble the bag
