@@ -3,6 +3,8 @@
 #include <vector>
 #include <iostream>
 
+#include "Bag.h"
+
 /// <summary>
 	/// Positional data for the radius, used by piece
 	/// T:TOP , M: MIDDLE , B: BOTTOM
@@ -12,7 +14,7 @@ enum Position {
 };
 class Tile {
 public:
-	std::string type;
+	ALL_PIECES type;
 	std::string facing;
 	Position relativePos;
 	bool isOccupied;
@@ -29,7 +31,7 @@ public:
 		isOccupied{ false },
 		isCenter{ false },
 		isPlaced{ false },
-		type{ "Blank" },
+		type{ BLANK },
 		facing{ "NA" },
 		isRadius{ false },
 		relativePos{ NONE }

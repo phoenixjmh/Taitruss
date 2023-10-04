@@ -1,15 +1,14 @@
 #include "../headers/Piece.h"
 
 
-bool Piece::CanRotate(std::string type, std::string facing, std::vector<Tile*> occupiedSquares, std::vector<Tile>& allSquares, int WIDTH, int HEIGHT) {
-	std::cout << "Facing: " << facing << "\n";
+bool Piece::CanRotate(ALL_PIECES type, std::string facing, std::vector<Tile*> occupiedSquares, std::vector<Tile>& allSquares, int WIDTH, int HEIGHT) {
 
 	if (BorderCheck(type, facing, occupiedSquares, WIDTH, HEIGHT) && NeighborCheck(type, facing, occupiedSquares, allSquares))
 		return true;
 	return false;
 }
-bool Piece::BorderCheck(std::string type, std::string facing, std::vector<Tile*> occupiedSquares, int WIDTH, int HEIGHT) {
-	if (type == "Long") {
+bool Piece::BorderCheck(ALL_PIECES type, std::string facing, std::vector<Tile*> occupiedSquares, int WIDTH, int HEIGHT) {
+	if (type == LONG) {
 		
 		if (this->GetRadius().size() < 16)
 		{
@@ -28,12 +27,10 @@ bool Piece::BorderCheck(std::string type, std::string facing, std::vector<Tile*>
 	//Check if radius has shrunk in size, if so, cannot rotate
 
 }
-bool Piece::NeighborCheck(std::string type, std::string facing, std::vector<Tile*> occupiedSquares, std::vector<Tile>& allSquares) {
+bool Piece::NeighborCheck(ALL_PIECES type, std::string facing, std::vector<Tile*> occupiedSquares, std::vector<Tile>& allSquares) {
 	UpdateRadius(occupiedSquares);
-	std::cout << "Radius size" << m_radius.size() << "\n";
 	for (auto& square : m_radius) {
 		if (square->isPlaced) {
-			std::cout << "RADIUS INFILTRATED\n";
 			return false;
 		}
 	}
@@ -118,7 +115,6 @@ void Piece::Rotate() const
 	Tile tile8Copy = *tile8;
 
 	//reassign
-	std::cout << "Tile 2: " << tile2->isOccupied << "  Tile0 Copy:  " << tile2Copy.isOccupied << "\n";
 
 	*tile0 = tile6Copy;
 	*tile1 = tile3Copy;
@@ -130,8 +126,6 @@ void Piece::Rotate() const
 	*tile7 = tile5Copy;
 	*tile8 = tile2Copy;
 
-	std::cout << "Copy completed brute reassignment\n" << "Tile 2: " << tile2->isOccupied << "\n";
-	std::cout << "CENTER FROM ROTATE SCRIPT" << tile4->xLocation << tile4->yLocation << "\n";
 }
 
 void Piece::RotateLong(std::vector<Tile*>occupiedSquares,std::vector<Tile> &squareObjects) {
@@ -160,7 +154,6 @@ void Piece::RotateLong(std::vector<Tile*>occupiedSquares,std::vector<Tile> &squa
 					s.type = m_type;
 					m_facing = "E";
 					m_rotated = true;
-					std::cout << "Rotated\n";
 				}
 			}
 		}
@@ -222,7 +215,7 @@ void Piece::UpdateRadius(std::vector<Tile*> occupiedSquares)
 	//that has a radius of all potential rotation widths
 	/*std::vector<Tile*> radius;*/
 	m_radius.clear();
-	if (m_type == "Long") {
+	if (m_type == LONG) {
 		if (m_facing == "N") {
 			for (auto& square : m_allSquares)
 			{

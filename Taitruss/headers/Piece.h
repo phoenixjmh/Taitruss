@@ -1,11 +1,13 @@
 #pragma once
 #include <string>
 #include <vector>
+
+#include "Bag.h"
 #include "Tile.h"
 class Piece {
 public:
-	bool CanRotate(std::string type, std::string facing, std::vector<Tile*> occupiedSquares, std::vector<Tile>& allSquares, int WIDTH, int HEIGHT);
-	std::string m_type;
+	bool CanRotate(ALL_PIECES type, std::string facing, std::vector<Tile*> occupiedSquares, std::vector<Tile>& allSquares, int WIDTH, int HEIGHT);
+	ALL_PIECES m_type;
 	std::string m_facing;
 	std::vector<Tile*> os;
 
@@ -17,7 +19,7 @@ public:
 
 
 
-	Piece(std::string type, std::string facing, std::vector<Tile*> occupiedSquares, std::vector<Tile>& allSquares, int WIDTH, int HEIGHT) :
+	Piece(ALL_PIECES type, std::string facing, std::vector<Tile*> occupiedSquares, std::vector<Tile>& allSquares, int WIDTH, int HEIGHT) :
 		m_type{ type },
 		m_facing{ facing },
 		m_allSquares{ allSquares },
@@ -32,6 +34,6 @@ private:
 	bool m_rotated;
 	std::vector<Tile>& m_allSquares;
 	std::vector<Tile*> m_radius;
-	bool BorderCheck(std::string type, std::string facing, std::vector<Tile*> occupiedSquares, int WIDTH, int HEIGHT);
-	bool NeighborCheck(std::string type, std::string facing, std::vector<Tile*> occupiedSquares, std::vector<Tile>& allSquares);
+	bool BorderCheck(ALL_PIECES type, std::string facing, std::vector<Tile*> occupiedSquares, int WIDTH, int HEIGHT);
+	bool NeighborCheck(ALL_PIECES type, std::string facing, std::vector<Tile*> occupiedSquares, std::vector<Tile>& allSquares);
 };

@@ -19,21 +19,25 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Bag.cpp" />
     <ClCompile Include="src\Piece.cpp" />
     <ClCompile Include="src\Board.cpp" />
     <ClCompile Include="src\Engine.cpp" />
     <ClCompile Include="src\EventManager.cpp" />
     <ClCompile Include="src\Interface.cpp" />
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\Scoreboard.cpp" />
     <ClCompile Include="src\Tile.cpp" />
     <ClCompile Include="src\TextureManager.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="headers\Bag.h" />
     <ClInclude Include="headers\Board.h" />
     <ClInclude Include="headers\Engine.h" />
     <ClInclude Include="headers\EventManager.h" />
     <ClInclude Include="headers\Interface.h" />
     <ClInclude Include="headers\Piece.h" />
+    <ClInclude Include="headers\Scoreboard.h" />
     <ClInclude Include="headers\Tile.h" />
     <ClInclude Include="headers\TextureManager.h" />
   </ItemGroup>
@@ -93,10 +97,10 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>C:\vclib\SDL2_image-2.6.3\include;C:\vclib\SDL2-2.28.3\include;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\vclib\SDL2_image-2.6.3\lib\x64;C:\vclib\SDL2-2.28.3\lib\x64;$(LibraryPath)</LibraryPath>
     <OutDir>$(SolutionDir)bin\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)bin\intermediate\$(Configuration)\</IntDir>
+    <IncludePath>C:\Users\TheUltimateFuckstick\Documents\Taitruss\Taitruss\Dependency\include;</IncludePath>
+    <LibraryPath>C:\Users\TheUltimateFuckstick\Documents\Taitruss\Taitruss\Dependency\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <OutDir>$(SolutionDir)bin\$(Configuration)\</OutDir>
@@ -109,6 +113,8 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <OutDir>$(SolutionDir)bin\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)bin\intermediate\$(Configuration)\</IntDir>
+    <IncludePath>C:\Users\TheUltimateFuckstick\Documents\Taitruss\Taitruss\Dependency\include;</IncludePath>
+    <LibraryPath>C:\Users\TheUltimateFuckstick\Documents\Taitruss\Taitruss\Dependency\lib;</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -166,6 +172,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_image.lib</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

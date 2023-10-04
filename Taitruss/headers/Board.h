@@ -2,13 +2,19 @@
 #include <vector>
 #include "Tile.h"
 #include <SDL_rect.h>
+#include "Bag.h"
 #include "TextureManager.h"
 #include "Piece.h"
 
+class Engine;
+
 class Board {
 public:
-	Board(int& res, SDL_Window* win)
-		:dropPiece{ true },
+	Board(int& res, SDL_Window* win,Engine* engine)
+
+		:
+		m_engine{engine},
+	dropPiece{ true },
 		placeOnNextTick{ false },
 		m_canMoveDown{ false },
 		m_resolution{ res },
@@ -24,7 +30,8 @@ public:
 		m_orangeSquare{ TextureManager::LoadTexture("res/img/OrangeSquare.png",this->m_resolution,this->m_resolution) }, m_radiusSquare{ TextureManager::LoadTexture("res/img/BlankSquareDB.png",this->m_resolution,this->m_resolution) },
 		m_currentPiece{ nullptr },
 		m_placed{ false },
-		m_pauseUpdate{ false }
+		m_pauseUpdate{ false },
+		GAMEOVER{ false }
 
 
 
@@ -45,26 +52,25 @@ public:
 	bool CanMoveDown();
 	void CollisionCheck();
 	void DrawBoard();
-	void AddPiece(std::string type);
+	void AddPiece(ALL_PIECES type);
 	void MoveDown();
 	void RotatePiece();
 	void Move(std::string dir);
 	int winWidth = 0, winHeight = 0;
-
-
 	bool dropPiece;
 	bool placeOnNextTick;
-
+	bool GAMEOVER;
 private:
+	Engine* m_engine;
 	bool m_canMoveDown;
 	int& m_resolution;
 	SDL_Rect src, dest;
 	std::vector<Tile> m_squareObjects;
 	std::vector<Tile*> m_occupiedSquares;
 	std::vector<Tile*> placedSquares;
-	static constexpr int HEIGHT = 15;
+	static constexpr int HEIGHT = 20;
 	static constexpr int WIDTH = 10;
-	std::string m_currentType;
+	ALL_PIECES m_currentType;
 	std::string m_currentFacing;
 	SDL_Texture* m_blankSquare;
 	SDL_Texture* m_blueSquare;

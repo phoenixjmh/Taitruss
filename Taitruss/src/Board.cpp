@@ -1,10 +1,12 @@
 #include "../headers/Board.h"
 #include <iostream>
 #include <algorithm>
+#include "../headers/Engine.h"
 
-void Board::AddPiece(std::string type) {
+
+void Board::AddPiece(ALL_PIECES type) {
 	dropPiece = false;
-	if (type == "Square") {
+	if (type == SQUARE) {
 		m_currentType = type;
 
 		std::cout << "Added " << type << " to board" << std::endl;
@@ -20,7 +22,7 @@ void Board::AddPiece(std::string type) {
 		}
 
 	}
-	if (type == "Long") {
+	if (type == LONG) {
 		m_currentType = type;
 		std::cout << "Added " << type << " to board" << std::endl;
 		for (auto& s : m_squareObjects) {
@@ -38,7 +40,7 @@ void Board::AddPiece(std::string type) {
 	}
 
 
-	if (type == "R") {
+	if (type == R_PIECE) {
 		m_currentType = type;
 		std::cout << "Added " << type << " to board" << std::endl;
 		for (auto& s : m_squareObjects) {
@@ -66,7 +68,7 @@ void Board::AddPiece(std::string type) {
 			}
 		}
 	}
-	if (type == "L") {
+	if (type == L_PIECE) {
 		m_currentType = type;
 		std::cout << "Added " << type << " to board" << std::endl;
 		for (auto& s : m_squareObjects) {
@@ -94,7 +96,7 @@ void Board::AddPiece(std::string type) {
 			}
 		}
 	}
-	if (type == "S") {
+	if (type == S_PIECE) {
 		m_currentType = type;
 		std::cout << "Added " << type << " to board" << std::endl;
 		for (auto& s : m_squareObjects) {
@@ -125,7 +127,7 @@ void Board::AddPiece(std::string type) {
 			}
 		}
 	}
-	if (type == "Z") {
+	if (type == Z_PIECE) {
 		m_currentType = type;
 		std::cout << "Added " << type << " to board" << std::endl;
 		for (auto& s : m_squareObjects) {
@@ -157,7 +159,7 @@ void Board::AddPiece(std::string type) {
 		}
 	}
 
-	if (type == "T") {
+	if (type == T_PIECE) {
 		m_currentType = type;
 		std::cout << "Added " << type << " to board" << std::endl;
 		for (auto& s : m_squareObjects) {
@@ -187,26 +189,28 @@ void Board::AddPiece(std::string type) {
 	}
 
 	UpdateVectors();
-	if (type != "" && m_occupiedSquares.size() > 0 && m_squareObjects.size() > 0)
+	if (type != BLANK && m_occupiedSquares.size() > 0 && m_squareObjects.size() > 0)
 		m_currentPiece = new Piece(type, "N", m_occupiedSquares, m_squareObjects, WIDTH, HEIGHT);
-	else std::cout << "ERROR::Failed to create 'Piece' in Board::AddPiece function::ERROR\n";
-
-
+	else {
+		std::cout << "ERROR::Failed to create 'Piece' in Board::AddPiece function::ERROR\n";
+		std::cout << "TYPE: " << type << " OCCUPIED SQUARES SIZE: " << m_occupiedSquares.size() << " ALLSQUARES SIZE: " << m_squareObjects.size() << "\n";
+	}
 }
 
 
 
 void Board::RotatePiece() {
 	//Clockwise Turn
-
+	if(m_currentPiece!=nullptr)
+	{
 	if (m_currentPiece->CanRotate(m_currentType, m_currentFacing, m_occupiedSquares, m_squareObjects, WIDTH, HEIGHT)) {
 
-		if (m_currentType == "Long") {
+		if (m_currentType == LONG) {
 			PauseUpdate();
 			m_currentPiece->RotateLong(m_occupiedSquares, m_squareObjects);
 			ResumeUpdate();
 		}
-		else if (m_currentType != "Long") {
+		else if (m_currentType != LONG) {
 			PauseUpdate();
 			m_currentPiece->Rotate();
 			m_currentPiece->RefreshPiece();
@@ -217,6 +221,7 @@ void Board::RotatePiece() {
 
 	}
 	else std::cout << "CANNOT ROTATE\n";
+	}
 }
 
 
@@ -260,11 +265,16 @@ void Board::CheckClearRow()
 			}
 		}
 	}
+	if(rowsToClear.size()<=0)
+	{
+		return;
+	}
 	std::cout << "INDEX TO DELETE TO" << clear_index << "\n";
 	//clear all rowsToClear
 	for (auto& r : rowsToClear)
 	{
 		ClearRow(r, clear_index - 1);
+		m_engine->scoreBoard->AddPoint();
 	}
 	const int times_to_move = rowsToClear.size();
 
@@ -273,12 +283,27 @@ void Board::CheckClearRow()
 
 void Board::ClearRow(const std::vector<Tile*>& row_to_clear, int index) {
 	std::cout << "CLEARING ROW \n";
-	for (auto& s : row_to_clear) {
-		s->isPlaced = false;
-		s->type = "Blank";
-		s->facing = "NA";
+	int clearDelay = 20;
+	int start =SDL_GetTicks();
+	for (int i = 0; i < row_to_clear.size();) {
+		row_to_clear[i]->isPlaced = false;
+		row_to_clear[i]->type = BLANK;
+		row_to_clear[i]->facing = "NA";
+		int current = SDL_GetTicks();
+		if(current-start>clearDelay)
+		{
+			i++;
+			start = current;
+		}
+		m_engine->render();
 
 	}
+	/*for (auto& s : row_to_clear) {
+		s->isPlaced = false;
+		s->type = BLANK;
+		s->facing = "NA";
+
+	}*/
 
 	UpdateVectors();
 
@@ -304,6 +329,7 @@ void Board::MovePlacedDown(int index, int times_to_move) {
 		UpdateVectors();
 		times_to_move--;
 	}
+	m_engine->gameSpeed -= 10;
 }
 
 void Board::ClearSquares() const
@@ -409,6 +435,7 @@ bool Board::CanMove(std::string dir)
 }
 
 void Board::Move(std::string dir) {
+	if(m_currentPiece!=nullptr){
 	PauseUpdate();
 	//check if can move direction
 	if (dir == "Left" && CanMove("Left")) {
@@ -461,6 +488,7 @@ void Board::Move(std::string dir) {
 	}
 	//currentPiece->Print();
 	ResumeUpdate();
+	}
 }
 void Board::MoveDown() {
 	//push all occupied squares down one piece  
@@ -523,7 +551,7 @@ void Board::UpdateVectors() {
 			}
 			else if (!s.isOccupied && !s.isPlaced) {
 				s.facing = "NA";
-				s.type = "Blank";
+				s.type = BLANK;
 			}
 		}
 	}
@@ -557,11 +585,19 @@ void Board::CollisionCheck() {
 	if (placeOnNextTick == false)
 	{
 		for (auto i = 0; i < m_squareObjects.size(); i++) {
+			//Check gameOver
+			if(i>0&&i<WIDTH)
+			{
+				if(m_squareObjects[i+WIDTH].isPlaced)
+				{
+					GAMEOVER = true;
+				}
+			}
 			if (i > WIDTH * 2) {
 				if (m_squareObjects[i].yLocation == HEIGHT - 1 && m_squareObjects[i].isOccupied && m_squareObjects[i].isPlaced == false) {
 					if (!m_placed)
 						placeOnNextTick = true;
-					/*PlacePiece();*/
+					
 				}
 
 				//if this block is placed
@@ -589,7 +625,7 @@ void Board::PlacePiece() {
 	std::cout << "Place\n";
 	m_placed = true;
 
-	for (const auto& all_occupied_squares : m_occupiedSquares) {
+ 	for (const auto& all_occupied_squares : m_occupiedSquares) {
 		all_occupied_squares->isPlaced = true;
 		all_occupied_squares->isOccupied = false;
 		all_occupied_squares->isCenter = false;
@@ -605,53 +641,7 @@ void Board::PlacePiece() {
 }
 
 
-#ifdef db
-void Board::DrawBoard() {
-	for (auto& s : squareObjects) {
 
-		int centeredStartX = (winWidth / 2) + (s.xLocation * this->resolution) - ((WIDTH * this->resolution) / 2);
-		int centeredStartY = (winHeight / 2) + (s.yLocation * this->resolution) - ((HEIGHT * this->resolution) / 2);
-		dest.x = centeredStartX;
-		dest.y = centeredStartY;
-		dest.w = this->resolution;
-		dest.h = this->resolution;
-
-		if (!s.isOccupied && !s.isPlaced || s.type == "Blank") {
-			if (!s.isRadius) {
-				TextureManager::Draw(BlankSquare, src, dest);
-			}
-			else {
-				TextureManager::Draw(RadiusSquare, src, dest);
-			}
-
-		}
-
-		else {
-			if (s.type == "Square") {
-				TextureManager::Draw(BlueSquare, src, dest);
-			}
-			if (s.type == "Long") {
-				TextureManager::Draw(YellowSquare, src, dest);
-			}
-			if (s.type == "R") {
-				TextureManager::Draw(RedSquare, src, dest);
-			}
-			if (s.type == "L") {
-				TextureManager::Draw(BlueSquare, src, dest);
-			}
-			if (s.type == "T") {
-				TextureManager::Draw(YellowSquare, src, dest);
-			}
-			if (s.type == "S") {
-				TextureManager::Draw(BlueSquare, src, dest);
-			}
-			if (s.type == "Z") {
-				TextureManager::Draw(RedSquare, src, dest);
-			}
-		}
-	}
-}
-#else
 void Board::DrawBoard() {
 	for (auto& s : m_squareObjects) {
 		const int centered_start_x = (winWidth / 2) + (s.xLocation * this->m_resolution) - ((WIDTH * this->m_resolution) / 2);
@@ -661,94 +651,40 @@ void Board::DrawBoard() {
 		dest.w = this->m_resolution;
 		dest.h = this->m_resolution;
 
-		if (!s.isOccupied && !s.isPlaced || s.type == "Blank") {
+		if (!s.isOccupied && !s.isPlaced || s.type == BLANK) {
 
 			TextureManager::Draw(m_blankSquare, src, dest);
 		}
 
 		else {
-			if (s.type == "Square") {
+			if (s.type == SQUARE) {
 				TextureManager::Draw(m_yellowSquare, src, dest);
 			}
-			if (s.type == "Long") {
+			if (s.type == LONG) {
 				TextureManager::Draw(m_lightBlueSquare, src, dest);
 			}
-			if (s.type == "R") {
+			if (s.type == R_PIECE) {
 				TextureManager::Draw(m_blueSquare, src, dest);
 			}
-			if (s.type == "L") {
+			if (s.type == L_PIECE) {
 				TextureManager::Draw(m_orangeSquare, src, dest);
 			}
-			if (s.type == "T") {
+			if (s.type == T_PIECE) {
 				TextureManager::Draw(m_purpleSquare, src, dest);
 			}
-			if (s.type == "S") {
+			if (s.type == S_PIECE) {
 				TextureManager::Draw(m_greenSquare, src, dest);
 			}
-			if (s.type == "Z") {
+			if (s.type == Z_PIECE) {
 				TextureManager::Draw(m_redSquare, src, dest);
 			}
 		}
 	}
 }
 
-#endif
-
-void Board::Print() const
-{
-	int counter = 0;
-	for (auto& os : m_occupiedSquares) {
-		std::cout << ++counter << "OS COUNTER\n";
-	}
-}
-
-void Board::print_b() {
-	int counter = 0;
-	std::cout << "----------------------------------" << std::endl;
-	for (auto i = this->m_squareObjects.begin(); i != this->m_squareObjects.end(); ++i) {
-		counter++;
-		if (i->isCenter) {
-			std::cout << "| " << "C" << " |";
-		}
-		else if (i->isPlaced)
-			std::cout << "| " << "*" << " |";
-		else if (i->isOccupied && !i->isCenter)
-			std::cout << "| " << i->facing << " |";
-		else
-			std::cout << "| " << counter << " |";
-		if (counter >= WIDTH) {
-			std::cout << std::endl;
-			counter = 0;
-		}
-	}
-	std::cout << "----------------------------------" << std::endl;
-
-}
-void Board::print_radius() const
-{
-	auto current_radius = m_currentPiece->GetRadius();
-	std::cout << "currentPieceInfo " << m_currentPiece->m_type << "\n";
-	std::cout << "Radius size" << current_radius.size();
-
-	int counter = 0;
-	std::cout << "----------------------------------" << std::endl;
-	for (const auto& square_object : m_squareObjects)
-	{
-		counter++;
-		auto it = std::find(current_radius.begin(), current_radius.end(), &square_object);
-
-		if (it != current_radius.end()) {
-			std::cout << "| * |";
-		}
 
 
-		else
-			std::cout << "| " << counter << " |";
-		if (counter >= WIDTH) {
-			std::cout << std::endl;
-			counter = 0;
-		}
-	}
-	std::cout << "----------------------------------" << std::endl;
 
-}
+
+
+
