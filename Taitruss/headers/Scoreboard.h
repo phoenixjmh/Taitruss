@@ -10,7 +10,9 @@ public:
 	int score;
 	int winWidth;
 	int winHeight;
-	int& blockResolution;
+	int blockResolution=256;
+	const int bannerXRes = 320;
+	const int bannerYRes = 190;
 	const char* filePathNumbers = "res/img/Numbers.png";
 	const char* filePathBanner = "res/img/Score-Banner.png";
 	const char* filePathBlankSquare = "res/img/BlankSquare.png";
@@ -32,9 +34,9 @@ public:
 	SDL_Rect src, dest;
 	std::vector<SDL_Texture*> texturesToRender;
 	Scoreboard(int block_resolution) :
+		
 		score(0),
-		blockResolution(block_resolution),
-		banner{ TextureManager::LoadTexture(filePathBanner, blockResolution, blockResolution) },
+		banner{ TextureManager::LoadTexture(filePathBanner, bannerXRes, bannerYRes) },
 		zero{ TextureManager::LoadTextureSlice(filePathNumbers, 0, block_resolution, block_resolution) },
 		one{ TextureManager::LoadTextureSlice(filePathNumbers, 1, block_resolution, block_resolution) },
 		two{ TextureManager::LoadTextureSlice(filePathNumbers, 2, block_resolution, block_resolution) },
@@ -45,7 +47,7 @@ public:
 		seven{ TextureManager::LoadTextureSlice(filePathNumbers, 7, block_resolution, block_resolution) },
 		eight{ TextureManager::LoadTextureSlice(filePathNumbers, 8, block_resolution, block_resolution) },
 		nine{ TextureManager::LoadTextureSlice(filePathNumbers, 9, block_resolution, block_resolution) },
-		blankSquare{ TextureManager::LoadTexture(filePathBlankSquare, blockResolution, blockResolution) },
+		blankSquare{ TextureManager::LoadTexture(filePathBlankSquare, block_resolution, block_resolution) },
 
 		src{ SDL_Rect{0, 0, blockResolution,blockResolution} },
 		dest{ SDL_Rect{0, 0, 50,50} }

@@ -5,8 +5,8 @@
 
 int BLOCK_RESOLUTION = 32;
 int& blockResolution = BLOCK_RESOLUTION;
-constexpr int SCREEN_WIDTH = 1280;
-constexpr int SCREEN_HEIGHT = 960;
+constexpr int SCREEN_WIDTH = 760;
+constexpr int SCREEN_HEIGHT = 480;
 int main(int argc, char* argv[]) {
 	int frame_delay = 1000;
 	Interface* interface = new Interface();

@@ -74,6 +74,8 @@ void Scoreboard::Draw()
 	this->dest.w = border_box_size;
 	this->dest.h = border_box_size;
 	TextureManager::Draw(blankSquare, src, this->dest);
+	src.w = bannerXRes;
+	src.h = bannerYRes;
 	this->dest.w = 75;
 	this->dest.y  +=10;
 	this->dest.h = 40;

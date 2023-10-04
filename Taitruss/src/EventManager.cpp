@@ -27,7 +27,6 @@ void EventManager::HandleEvents(int& pressDelay ,const Uint32 input_start, Uint3
 {
 	if (pressDelay > 0)
 	{
-	std::cout << pressDelay << "PRESSDELAY\n";
 		pressDelay--;
 		
 	}

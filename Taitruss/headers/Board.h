@@ -18,16 +18,16 @@ public:
 		placeOnNextTick{ false },
 		m_canMoveDown{ false },
 		m_resolution{ res },
-		src{ SDL_Rect{0,0,res,res} },
+		src{ SDL_Rect{0,0,blockTextureRes,blockTextureRes} },
 		dest{ SDL_Rect { 0,0,res,res } },
-		m_blankSquare{ TextureManager::LoadTexture("res/img/BlankSquare.png",this->m_resolution,this->m_resolution) },
-		m_blueSquare{ TextureManager::LoadTexture("res/img/BlueSquare.png",this->m_resolution,this->m_resolution) },
-		m_yellowSquare{ TextureManager::LoadTexture("res/img/YellowSquare.png",this->m_resolution,this->m_resolution) },
-		m_redSquare{ TextureManager::LoadTexture("res/img/RedSquare.png",this->m_resolution,this->m_resolution) },
-		m_greenSquare{ TextureManager::LoadTexture("res/img/GreenSquare.png",this->m_resolution,this->m_resolution) },
-		m_purpleSquare{ TextureManager::LoadTexture("res/img/PurpleSquare.png",this->m_resolution,this->m_resolution) },
-		m_lightBlueSquare{ TextureManager::LoadTexture("res/img/LightBlueSquare.png",this->m_resolution,this->m_resolution) },
-		m_orangeSquare{ TextureManager::LoadTexture("res/img/OrangeSquare.png",this->m_resolution,this->m_resolution) }, m_radiusSquare{ TextureManager::LoadTexture("res/img/BlankSquareDB.png",this->m_resolution,this->m_resolution) },
+		m_blankSquare{ TextureManager::LoadTexture("res/img/BlankSquare.png",blockTextureRes,blockTextureRes) },
+		m_blueSquare{ TextureManager::LoadTexture("res/img/BlueSquare.png",blockTextureRes,blockTextureRes) },
+		m_yellowSquare{ TextureManager::LoadTexture("res/img/YellowSquare.png",blockTextureRes,blockTextureRes) },
+		m_redSquare{ TextureManager::LoadTexture("res/img/RedSquare.png",blockTextureRes,blockTextureRes) },
+		m_greenSquare{ TextureManager::LoadTexture("res/img/GreenSquare.png",blockTextureRes,blockTextureRes) },
+		m_purpleSquare{ TextureManager::LoadTexture("res/img/PurpleSquare.png",blockTextureRes,blockTextureRes) },
+		m_lightBlueSquare{ TextureManager::LoadTexture("res/img/LightBlueSquare.png",blockTextureRes,blockTextureRes) },
+		m_orangeSquare{ TextureManager::LoadTexture("res/img/OrangeSquare.png",blockTextureRes,blockTextureRes) }, m_radiusSquare{ TextureManager::LoadTexture("res/img/BlankSquareDB.png",this->m_resolution,this->m_resolution) },
 		m_currentPiece{ nullptr },
 		m_placed{ false },
 		m_pauseUpdate{ false },
@@ -64,6 +64,7 @@ private:
 	Engine* m_engine;
 	bool m_canMoveDown;
 	int& m_resolution;
+	int blockTextureRes = 256;
 	SDL_Rect src, dest;
 	std::vector<Tile> m_squareObjects;
 	std::vector<Tile*> m_occupiedSquares;

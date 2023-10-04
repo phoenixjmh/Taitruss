@@ -99,8 +99,8 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <OutDir>$(SolutionDir)bin\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)bin\intermediate\$(Configuration)\</IntDir>
-    <IncludePath>C:\Users\TheUltimateFuckstick\Documents\Taitruss\Taitruss\Dependency\include;</IncludePath>
-    <LibraryPath>C:\Users\TheUltimateFuckstick\Documents\Taitruss\Taitruss\Dependency\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)\Taitruss\Dependency\include;</IncludePath>
+    <LibraryPath>$(SolutionDir)\Taitruss\Dependency\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <OutDir>$(SolutionDir)bin\$(Configuration)\</OutDir>

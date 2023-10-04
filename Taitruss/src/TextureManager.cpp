@@ -1,6 +1,7 @@
 #include "../headers/TextureManager.h"
 
-SDL_Texture* TextureManager::LoadTexture(const char* filename, int& width, int& height)
+
+SDL_Texture* TextureManager::LoadTexture(const char* filename, int width, int height)
 {
 	if (IMG_Load(filename) == NULL) {
 		std::cout << "FAILED TO LOAD IMAGE" << SDL_GetError() << std::endl;
