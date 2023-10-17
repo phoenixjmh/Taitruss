@@ -45,6 +45,15 @@
     <ClCompile Include="src\Scoreboard.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\Audio.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Textures.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="headers\Interface.h">
@@ -74,8 +83,81 @@
     <ClInclude Include="headers\Scoreboard.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="headers\Audio.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="headers\Game.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="headers\Textures.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="res\img\BlankSquare.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\img\BlankSquareDB.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\img\BlueSquare.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\img\GreenSquare.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\img\LightBlueSquare.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\img\Numbers.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\img\OrangeSquare.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\img\PurpleSquare.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\img\RedSquare.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\img\Score-Banner.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\img\YellowSquare.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\img\PauseScreen.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\img\StartMenuTitle.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\img\Level_Banner.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <Media Include="res\audio\Taitruss_Theme.wav">
+      <Filter>Resource Files</Filter>
+    </Media>
+    <Media Include="res\audio\ClearRow.wav">
+      <Filter>Resource Files</Filter>
+    </Media>
+    <Media Include="res\audio\GameOver.wav">
+      <Filter>Resource Files</Filter>
+    </Media>
+    <Media Include="res\audio\MoveBlock.wav">
+      <Filter>Resource Files</Filter>
+    </Media>
+    <Media Include="res\audio\PlaceBlock.wav">
+      <Filter>Resource Files</Filter>
+    </Media>
+    <Media Include="res\audio\PauseGame.wav">
+      <Filter>Resource Files</Filter>
+    </Media>
   </ItemGroup>
 </Project>

@@ -3,7 +3,6 @@
 SDL_Renderer* Interface::renderer = nullptr;
 
 SDL_Window* Interface::CreateWindow(int SCREEN_WIDTH, int SCREEN_HEIGHT, const char* name) {
-	SDL_Surface* screenSurface = NULL;
 	m_WIDTH = &SCREEN_WIDTH;
 	m_HEIGHT = &SCREEN_HEIGHT;
 	if (SDL_Init(SDL_INIT_EVERYTHING) == 0)
@@ -13,9 +12,10 @@ SDL_Window* Interface::CreateWindow(int SCREEN_WIDTH, int SCREEN_HEIGHT, const c
 		if (window)
 		{
 			std::cout << "Window Created" << std::endl;
-			renderer = SDL_CreateRenderer(window, -1, 0);
+			renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED|SDL_RENDERER_PRESENTVSYNC);
 			if (renderer) {
-				SDL_SetRenderDrawColor(renderer, 10, 10, 10, 0);
+				SDL_SetRenderDrawColor(renderer, 10, 10, 10,255);
+				SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
 				std::cout << "Renderer Created" << std::endl;
 			}
 		}
@@ -24,6 +24,7 @@ SDL_Window* Interface::CreateWindow(int SCREEN_WIDTH, int SCREEN_HEIGHT, const c
 	}
 	else return NULL;
 }
+
 
 
 

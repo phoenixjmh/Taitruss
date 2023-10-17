@@ -1,2 +1,11 @@
-Block rotation when it will move into edge or other piece
-Scramble the bag
+Fix color change on place:
+	What causes it?
+
+Very basic start menu/pause screen
+
+
+
+
+
+
+

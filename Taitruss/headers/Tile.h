@@ -17,6 +17,7 @@ public:
 	ALL_PIECES type;
 	std::string facing;
 	Position relativePos;
+	bool placedHasFallen;
 	bool isOccupied;
 	bool isCenter;
 	bool isPlaced;
@@ -34,14 +35,16 @@ public:
 		type{ BLANK },
 		facing{ "NA" },
 		isRadius{ false },
-		relativePos{ NONE }
+		relativePos{ NONE },
+	placedHasFallen{false}
 	{}
 	Tile& operator=(const Tile& other) {  // NOLINT(clang-diagnostic-deprecated-copy-with-user-provided-copy)
 
 		this->type = other.type;
 		this->isOccupied = other.isOccupied;
 		this->facing = other.facing;
+		this->isPlaced = other.isPlaced;
 
-		return *this;
+		return *this; //change
 	}
 };

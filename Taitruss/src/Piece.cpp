@@ -58,15 +58,15 @@ void Piece::RefreshPiece() {
 void Piece::Rotate() const
 {
 	
-	Tile* tile0 = new Tile;
-	Tile* tile1 = new Tile;
-	Tile* tile2 = new Tile;
-	Tile* tile3 = new Tile;
-	Tile* tile4 = new Tile;
-	Tile* tile5 = new Tile;
-	Tile* tile6 = new Tile;
-	Tile* tile7 = new Tile;
-	Tile* tile8 = new Tile;
+	Tile* tile0 = nullptr;
+	Tile* tile1 = nullptr;
+	Tile* tile2 = nullptr;
+	Tile* tile3 = nullptr;
+	Tile* tile4 = nullptr;
+	Tile* tile5 = nullptr;
+	Tile* tile6 = nullptr;
+	Tile* tile7 = nullptr;
+	Tile* tile8 = nullptr;
 	//assign tiles to index[0-9] using relativePos, assigned in updateRadius
 
 	for (auto& tile : m_radius)
@@ -114,6 +114,8 @@ void Piece::Rotate() const
 	Tile tile7Copy = *tile7;
 	Tile tile8Copy = *tile8;
 
+
+
 	//reassign
 
 	*tile0 = tile6Copy;
@@ -125,6 +127,7 @@ void Piece::Rotate() const
 	*tile6 = tile8Copy;
 	*tile7 = tile5Copy;
 	*tile8 = tile2Copy;
+	
 
 }
 
@@ -310,7 +313,7 @@ void Piece::UpdateRadius(std::vector<Tile*> occupiedSquares)
 		//     | -x, y |center| +x,y  |
 		//     | -x,+y | x,+y | +x,+y |
 
-		Tile* center = new Tile;
+		Tile* center=nullptr;
 		for (auto& c : m_allSquares)
 		{
 			if (c.isCenter) {

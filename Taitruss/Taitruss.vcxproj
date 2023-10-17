@@ -19,7 +19,9 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Audio.cpp" />
     <ClCompile Include="src\Bag.cpp" />
+    <ClCompile Include="src\Game.cpp" />
     <ClCompile Include="src\Piece.cpp" />
     <ClCompile Include="src\Board.cpp" />
     <ClCompile Include="src\Engine.cpp" />
@@ -27,22 +29,72 @@
     <ClCompile Include="src\Interface.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\Scoreboard.cpp" />
+    <ClCompile Include="src\Textures.cpp" />
     <ClCompile Include="src\Tile.cpp" />
     <ClCompile Include="src\TextureManager.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="headers\Audio.h" />
     <ClInclude Include="headers\Bag.h" />
     <ClInclude Include="headers\Board.h" />
     <ClInclude Include="headers\Engine.h" />
     <ClInclude Include="headers\EventManager.h" />
+    <ClInclude Include="headers\Game.h" />
     <ClInclude Include="headers\Interface.h" />
     <ClInclude Include="headers\Piece.h" />
     <ClInclude Include="headers\Scoreboard.h" />
+    <ClInclude Include="headers\Textures.h" />
     <ClInclude Include="headers\Tile.h" />
     <ClInclude Include="headers\TextureManager.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="res\img\BlankSquare.png">
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
+    </Image>
+    <Image Include="res\img\BlankSquareDB.png">
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
+    </Image>
+    <Image Include="res\img\BlueSquare.png">
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
+    </Image>
+    <Image Include="res\img\GreenSquare.png">
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
+    </Image>
+    <Image Include="res\img\Level_Banner.png" />
+    <Image Include="res\img\LightBlueSquare.png">
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
+    </Image>
+    <Image Include="res\img\Numbers.png">
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
+    </Image>
+    <Image Include="res\img\OrangeSquare.png">
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
+    </Image>
+    <Image Include="res\img\PauseScreen.png" />
+    <Image Include="res\img\PurpleSquare.png">
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
+    </Image>
+    <Image Include="res\img\RedSquare.png">
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
+    </Image>
+    <Image Include="res\img\Score-Banner.png">
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
+    </Image>
+    <Image Include="res\img\StartMenuTitle.png" />
+    <Image Include="res\img\YellowSquare.png">
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <Media Include="res\audio\ClearRow.wav" />
+    <Media Include="res\audio\GameOver.wav" />
+    <Media Include="res\audio\MoveBlock.wav" />
+    <Media Include="res\audio\PauseGame.wav" />
+    <Media Include="res\audio\PlaceBlock.wav" />
+    <Media Include="res\audio\Taitruss_Theme.wav" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
@@ -113,8 +165,8 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <OutDir>$(SolutionDir)bin\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)bin\intermediate\$(Configuration)\</IntDir>
-    <IncludePath>C:\Users\TheUltimateFuckstick\Documents\Taitruss\Taitruss\Dependency\include;</IncludePath>
-    <LibraryPath>C:\Users\TheUltimateFuckstick\Documents\Taitruss\Taitruss\Dependency\lib;</LibraryPath>
+    <IncludePath>$(SolutionDir)\Taitruss\Dependency\include;</IncludePath>
+    <LibraryPath>$(SolutionDir)\Taitruss\Dependency\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -155,7 +207,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_image.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_image.lib;SDL2_mixer.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -166,13 +218,17 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+      <WholeProgramOptimization>false</WholeProgramOptimization>
     </ClCompile>
     <Link>
-      <SubSystem>Console</SubSystem>
+      <SubSystem>Windows</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_image.lib</AdditionalDependencies>
+      <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_image.lib;SDL2_mixer.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>
+      </AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

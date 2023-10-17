@@ -1,0 +1,53 @@
+	PauseUpdate();
+		ClearPlaced(index);
+		for (auto& s : m_squareObjects) {
+			for (auto& ps : placedSquares) {
+				if (s.xLocation == ps->xLocation && s.yLocation == ps->yLocation + 1
+					&& ps->yLocation <= index) {
+					s.isPlaced = true;
+					s.type = ps->type;
+					s.facing = m_currentFacing;
+				}
+			}
+		}
+		ResumeUpdate();
+		UpdateVectors();
+
+
+
+
+
+
+			std::vector<Tile*> placedToMoveDown;
+		for (auto p : placedSquares)
+		{
+			if (p->yLocation < index)
+			{
+				placedToMoveDown.push_back(p);
+			}
+		}
+		std::cout << "AMOUNT TILES ABOVE CLEARED ROW: " << placedToMoveDown.size();
+		ClearPlaced(index); //clear all above index
+
+		for (auto& s : m_squareObjects) {
+			auto typeCopy = s.type;
+			for (auto& ps : placedToMoveDown) {
+				if (s.xLocation == ps->xLocation &&
+					s.yLocation == ps->yLocation + 1 &&
+					!ps->placedHasFallen) {
+					s.isPlaced = true;
+					s.type = ps->type;
+					s.facing = m_currentFacing;
+					s.placedHasFallen = true;//change to s, add else, where it is reassigned as placed, but with it's original type. copy s.type first?
+				}
+				else if (s.xLocation == ps->xLocation &&
+						s.yLocation == ps->yLocation + 1 &&
+						ps->placedHasFallen)
+						{
+							//retrieve original color of this block
+						}
+			}
+		}
+	}
+	ResumeUpdate();
+	UpdateVectors();

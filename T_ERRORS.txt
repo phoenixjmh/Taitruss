@@ -1,11 +1,8 @@
 
 
-sometimes when moving left or right:
 
-	pieces randomly thiggn
-	NO CLUE
 
 sometimes pieces become placed at the top of the board
 
-	NO IDEA
+	this happens when a piece is placed, and continues to move...
 
